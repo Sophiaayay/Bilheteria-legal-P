@@ -77,7 +77,7 @@ def abrir_menu_principal(nome_usuario):
     janela_menu = tk.Toplevel()
     janela_menu.title("PobreFlix - Menu Principal")
     janela_menu.configure(bg="#141414")
-    centralizar_janela(janela_menu, 500, 400)
+    centralizar_janela(janela_menu, 1920, 1080)
 
     janela_menu.protocol("WM_DELETE_WINDOW", janela.destroy)
 
@@ -86,8 +86,8 @@ def abrir_menu_principal(nome_usuario):
         text=f"Olá, {nome_usuario}!", 
         font=("Arial", 20, "bold"), 
         bg="#141414", 
-        fg="#E50914" 
-    ).pack(pady=30)
+        fg="#E50914"
+    ).pack(pady=30, padx=10, anchor="nw")
 
     tk.Label(
         janela_menu, 
@@ -95,27 +95,11 @@ def abrir_menu_principal(nome_usuario):
         font=("Arial", 12), 
         bg="#141414", 
         fg="white"
-    ).pack(pady=10)
+    ).pack(pady=10,padx=10, anchor="nw")
 
-    def acao_ver_filmes():
-        messagebox.showinfo("Ver Filmes", "Abrindo o catálogo de filmes...")
 
     def acao_pesquisar():
         messagebox.showinfo("Pesquisar", "Abrindo a barra de pesquisa de títulos...")
-
-    btn_filmes = tk.Button(
-        janela_menu,
-        text="🎬 Ver Filmes",
-        font=("Arial", 14, "bold"),
-        bg="#E50914",
-        fg="white",
-        width=20,
-        height=2,
-        bd=0,
-        cursor="hand2",
-        command=acao_ver_filmes
-    )
-    btn_filmes.pack(pady=15)
 
     btn_pesquisar = tk.Button(
         janela_menu,
@@ -125,11 +109,11 @@ def abrir_menu_principal(nome_usuario):
         fg="white",
         width=20,
         height=2,
-        bd=0,
+        bd=3,
         cursor="hand2",
         command=acao_pesquisar
     )
-    btn_pesquisar.pack(pady=15)
+    btn_pesquisar.pack(pady=15, padx=10, anchor="nw")
 
 
 janela = tk.Tk()
