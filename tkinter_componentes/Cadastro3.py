@@ -2,8 +2,6 @@ import os
 import tkinter as tk
 from tkinter import messagebox
 from tkinter import ttk
-# Necessário instalar: pip install pillow
-from PIL import Image, ImageTk 
 
 ARQUIVO_DB = "UsuariosSalvos.txt"
 usuarios_db = {}
@@ -82,37 +80,36 @@ def abrir_menu_principal(nome_usuario):
     janela_menu.configure(bg="#141414")
     largura = janela_menu.winfo_screenwidth()
     altura = janela_menu.winfo_screenheight()
-    janela_menu.geometry(f"{largura}x{altura}+0+0")  # tela cheia
+    janela_menu.geometry(f"{largura}x{altura}+0+0")
 
-    # Mapeamento exato dos arquivos enviados por você
     filmes = [
         {
             "nome": "chaos",
             "ano": "2014",
             "genero": "Ficção Científica",
             "descricao": "Uma equipe viaja pelo espaço em busca de um novo lar para a humanidade.",
-            "imagem": "WhatsApp Image 2026-07-08 at 09.04.02.jpeg"
+            "imagem": "chaos.png"
         },
         {
             "nome": "Death note: o ultimo domingo a noite",
             "ano": "2019",
             "genero": "Ação",
             "descricao": "Os heróis enfrentam Thanos pela última vez.",
-            "imagem": "WhatsApp Image 2026-07-08 at 09.04.02 (1).jpeg"
+            "imagem": "deathnote.png"
         },
         {
-            "nome": "Coringa",
+            "nome": "Dinasty",
             "ano": "2019",
             "genero": "Drama",
             "descricao": "A origem do maior vilão de Gotham.",
-            "imagem": "WhatsApp Image 2026-07-08 at 09.04.03 (1).jpeg"
+            "imagem": "c:\\Users\\Usuario\\Desktop\\fotos poo\\dinasty.png"
         },
         {
             "nome": "Avatar",
             "ano": "2009",
             "genero": "Ficção",
             "descricao": "Um ex-fuzileiro chega ao planeta Pandora.",
-            "imagem": "WhatsApp Image 2026-07-08 at 09.04.03 (2).jpeg"
+            "imagem": "avatar.png"
         },
         {
             "nome": "Matrix",
@@ -130,45 +127,24 @@ def abrir_menu_principal(nome_usuario):
         }
     ]
 
-    # Lista para manter a referência das imagens na memória e evitar o Garbage Collector do Python
     janela_menu.references = []
-
-    # --------------------------
-    # Barra Superior
-    # --------------------------
 
     topo = tk.Frame(janela_menu, bg="#141414")
     topo.pack(fill="x")
 
-    titulo = tk.Label(
-        topo,
-        text="POBREFLIX",
-        fg="#E50914",
-        bg="#141414",
-        font=("Arial", 30, "bold")
-    )
+    titulo = tk.Label(topo, text="POBREFLIX", fg="#E50914", bg="#141414", font=("Arial", 30, "bold"))
     titulo.pack(side="left", padx=20, pady=20)
 
-    usuario_label = tk.Label(
-        topo,
-        text=f"Olá, {nome_usuario}",
-        fg="white",
-        bg="#141414",
-        font=("Arial", 16)
-    )
+    usuario_label = tk.Label(topo, text=f"Olá, {nome_usuario}", fg="white", bg="#141414", font=("Arial", 16))
     usuario_label.pack(side="right", padx=20)
 
-    # --------------------------
-    # Pesquisa
-    # --------------------------
-
+   
     frame_pesquisa = tk.Frame(janela_menu, bg="#141414")
     frame_pesquisa.pack(fill="x", pady=10)
 
     entrada = tk.Entry(frame_pesquisa, font=("Arial", 14), width=40)
     entrada.pack(side="left", padx=20)
 
-    # Adicionado um Canvas com Scrollbar para os filmes não cortarem em telas menores
     container_filmes = tk.Frame(janela_menu, bg="#141414")
     container_filmes.pack(fill="both", expand=True, padx=20, pady=10)
 
@@ -176,11 +152,7 @@ def abrir_menu_principal(nome_usuario):
     scrollbar = tk.Scrollbar(container_filmes, orient="vertical", command=canvas.yview)
     frame_filmes = tk.Frame(canvas, bg="#141414")
 
-    frame_filmes.bind(
-        "<Configure>",
-        lambda e: canvas.configure(scrollregion=canvas.bbox("all"))
-    )
-
+    frame_filmes.bind("<Configure>", lambda e: canvas.configure(scrollregion=canvas.bbox("all")))
     canvas.create_window((0, 0), window=frame_filmes, anchor="nw")
     canvas.configure(yscrollcommand=scrollbar.set)
 
@@ -188,7 +160,6 @@ def abrir_menu_principal(nome_usuario):
     scrollbar.pack(side="right", fill="y")
 
     def mostrar_filmes(lista):
-        # Limpa o frame de filmes e as referências antigas de imagem
         for widget in frame_filmes.winfo_children():
             widget.destroy()
         janela_menu.references.clear()
@@ -197,29 +168,23 @@ def abrir_menu_principal(nome_usuario):
         coluna = 0
 
         for filme in lista:
-            card = tk.Frame(
-                frame_filmes,
-                bg="#222222",
-                padx=10,
-                pady=10,
-                relief="raised",
-                bd=2
-            )
+            card = tk.Frame(frame_filmes, bg="#222222", padx=10, pady=10, relief="raised", bd=2)
             card.grid(row=linha, column=coluna, padx=20, pady=20)
 
-            # Lógica para carregar a imagem real enviada
             img_tk = None
             if filme["imagem"] and os.path.exists(filme["imagem"]):
                 try:
-                    img_pillow = Image.open(filme["imagem"])
-                    # Redimensiona mantendo a proporção aproximada do card do botão original
-                    img_pillow = img_pillow.resize((160, 160), Image.Resampling.LANCEZOR)
-                    img_tk = ImageTk.PhotoImage(img_pillow)
-                    janela_menu.references.append(img_tk)  # Mantém referência ativa
+                    
+                    img_tk = tk.PhotoImage(file=filme["imagem"])
+                    
+                
+                    if img_tk.width() > 300:
+                        img_tk = img_tk.subsample(4, 4)
+                        
+                    janela_menu.references.append(img_tk)
                 except Exception as e:
                     print(f"Erro ao carregar {filme['imagem']}: {e}")
 
-            # Botão modificado: Se houver imagem, exibe a imagem; caso contrário, exibe o texto padrão
             if img_tk:
                 botao = tk.Button(
                     card,
@@ -228,11 +193,7 @@ def abrir_menu_principal(nome_usuario):
                     activebackground="#333333",
                     bd=0,
                     command=lambda f=filme: messagebox.showinfo(
-                        f["nome"],
-                        f"{f['nome']}\n\n"
-                        f"Ano: {f['ano']}\n"
-                        f"Gênero: {f['genero']}\n\n"
-                        f"{f['descricao']}"
+                        f["nome"], f"{f['nome']}\n\nAno: {f['ano']}\nGênero: {f['genero']}\n\n{f['descricao']}"
                     )
                 )
             else:
@@ -245,32 +206,14 @@ def abrir_menu_principal(nome_usuario):
                     fg="white",
                     font=("Arial", 10),
                     command=lambda f=filme: messagebox.showinfo(
-                        f["nome"],
-                        f"{f['nome']}\n\n"
-                        f"Ano: {f['ano']}\n"
-                        f"Gênero: {f['genero']}\n\n"
-                        f"{f['descricao']}"
+                        f["nome"], f"{f['nome']}\n\nAno: {f['ano']}\nGênero: {f['genero']}\n\n{f['descricao']}"
                     )
                 )
 
             botao.pack()
 
-            tk.Label(
-                card,
-                text=filme["nome"],
-                bg="#222222",
-                fg="white",
-                font=("Arial", 12, "bold"),
-                wraplength=180
-            ).pack(pady=5)
-
-            tk.Label(
-                card,
-                text=f"{filme['ano']} • {filme['genero']}",
-                bg="#222222",
-                fg="#AAAAAA",
-                font=("Arial", 10)
-            ).pack()
+            tk.Label(card, text=filme["nome"], bg="#222222", fg="white", font=("Arial", 12, "bold"), wraplength=180).pack(pady=5)
+            tk.Label(card, text=f"{filme['ano']} • {filme['genero']}", bg="#222222", fg="#AAAAAA", font=("Arial", 10)).pack()
 
             coluna += 1
             if coluna == 3:
@@ -285,15 +228,7 @@ def abrir_menu_principal(nome_usuario):
                 encontrados.append(filme)
         mostrar_filmes(encontrados)
 
-    tk.Button(
-        frame_pesquisa,
-        text="Pesquisar",
-        bg="#E50914",
-        fg="white",
-        font=("Arial", 12, "bold"),
-        command=pesquisar
-    ).pack(side="left")
-
+    tk.Button(frame_pesquisa, text="Pesquisar", bg="#E50914", fg="white", font=("Arial", 12, "bold"), command=pesquisar).pack(side="left")
     mostrar_filmes(filmes)
 
 
@@ -315,7 +250,6 @@ entry_log_senha.pack(pady=5)
 tk.Button(frame_login, text="Entrar", font=("Arial", 12, "bold"), command=fazer_login, bg="#4CAF50", fg="white", width=15, cursor="hand2").pack(pady=20)
 tk.Label(frame_login, text="Ainda não tem uma conta?", font=("Arial", 10), bg="#f0f0f0", fg="#666").pack()
 tk.Button(frame_login, text="Cadastre-se", font=("Arial", 10, "underline"), fg="#2196F3", bg="#f0f0f0", bd=0, command=lambda: [limpar_campos(entry_log_usuario, entry_log_senha), mostrar_tela(frame_cadastro)], cursor="hand2").pack()
-
 
 frame_cadastro = tk.Frame(janela, bg="#f0f0f0")
 tk.Label(frame_cadastro, text="Cadastro de Conta", font=("Arial", 22, "bold"), bg="#f0f0f0", fg="#333").pack(pady=20)
