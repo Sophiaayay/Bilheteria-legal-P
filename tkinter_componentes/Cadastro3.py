@@ -3,6 +3,7 @@ import tkinter as tk
 from tkinter import messagebox
 from tkinter import ttk
 from PIL import Image, ImageTk
+from filme import abrir_filme
 
 ARQUIVO_DB = "UsuariosSalvos.txt"
 usuarios_db = {}
@@ -198,13 +199,7 @@ def abrir_menu_principal(nome_usuario):
                 height=10,
                 bg="#555555",
                 fg="white",
-                command=lambda f=filme: messagebox.showinfo(
-                    f["nome"],
-                    f"{f['nome']}\n\n"
-                    f"Ano: {f['ano']}\n"
-                    f"Gênero: {f['genero']}\n\n"
-                    f"{f['descricao']}"
-                )
+                command=lambda f=filme: abrir_filme(f, nome_usuario) # Correção aqui
             )
 
             botao.pack()
