@@ -2,7 +2,8 @@ import os
 import tkinter as tk
 from tkinter import messagebox
 from tkinter import ttk
-from PIL import Image, ImageTk
+# Necessário instalar: pip install pillow
+from PIL import Image, ImageTk 
 
 ARQUIVO_DB = "UsuariosSalvos.txt"
 usuarios_db = {}
@@ -83,37 +84,35 @@ def abrir_menu_principal(nome_usuario):
     altura = janela_menu.winfo_screenheight()
     janela_menu.geometry(f"{largura}x{altura}+0+0")  # tela cheia
 
-    # --------------------------
-    # Catálogo de Filmes
-    # --------------------------
+    # Mapeamento exato dos arquivos enviados por você
     filmes = [
         {
-            "nome": "Interestelar",
+            "nome": "chaos",
             "ano": "2014",
             "genero": "Ficção Científica",
             "descricao": "Uma equipe viaja pelo espaço em busca de um novo lar para a humanidade.",
-            "imagem": None
+            "imagem": "WhatsApp Image 2026-07-08 at 09.04.02.jpeg"
         },
         {
-            "nome": "Vingadores: Ultimato",
+            "nome": "Death note: o ultimo domingo a noite",
             "ano": "2019",
             "genero": "Ação",
             "descricao": "Os heróis enfrentam Thanos pela última vez.",
-            "imagem": None
+            "imagem": "WhatsApp Image 2026-07-08 at 09.04.02 (1).jpeg"
         },
         {
             "nome": "Coringa",
             "ano": "2019",
             "genero": "Drama",
             "descricao": "A origem do maior vilão de Gotham.",
-            "imagem": None
+            "imagem": "WhatsApp Image 2026-07-08 at 09.04.03 (1).jpeg"
         },
         {
             "nome": "Avatar",
             "ano": "2009",
             "genero": "Ficção",
             "descricao": "Um ex-fuzileiro chega ao planeta Pandora.",
-            "imagem": None
+            "imagem": "WhatsApp Image 2026-07-08 at 09.04.03 (2).jpeg"
         },
         {
             "nome": "Matrix",
@@ -131,6 +130,9 @@ def abrir_menu_principal(nome_usuario):
         }
     ]
 
+    # Lista para manter a referência das imagens na memória e evitar o Garbage Collector do Python
+    janela_menu.references = []
+
     # --------------------------
     # Barra Superior
     # --------------------------
@@ -147,38 +149,54 @@ def abrir_menu_principal(nome_usuario):
     )
     titulo.pack(side="left", padx=20, pady=20)
 
-    usuario = tk.Label(
+    usuario_label = tk.Label(
         topo,
         text=f"Olá, {nome_usuario}",
         fg="white",
         bg="#141414",
-        font=("Arial",16)
+        font=("Arial", 16)
     )
-    usuario.pack(side="right", padx=20)
+    usuario_label.pack(side="right", padx=20)
 
     # --------------------------
     # Pesquisa
     # --------------------------
 
-    frame_pesquisa = tk.Frame(janela_menu,bg="#141414")
+    frame_pesquisa = tk.Frame(janela_menu, bg="#141414")
     frame_pesquisa.pack(fill="x", pady=10)
 
-    entrada = tk.Entry(frame_pesquisa,font=("Arial",14),width=40)
+    entrada = tk.Entry(frame_pesquisa, font=("Arial", 14), width=40)
     entrada.pack(side="left", padx=20)
 
-    frame_filmes = tk.Frame(janela_menu,bg="#141414")
-    frame_filmes.pack(fill="both", expand=True)
+    # Adicionado um Canvas com Scrollbar para os filmes não cortarem em telas menores
+    container_filmes = tk.Frame(janela_menu, bg="#141414")
+    container_filmes.pack(fill="both", expand=True, padx=20, pady=10)
+
+    canvas = tk.Canvas(container_filmes, bg="#141414", bd=0, highlightthickness=0)
+    scrollbar = tk.Scrollbar(container_filmes, orient="vertical", command=canvas.yview)
+    frame_filmes = tk.Frame(canvas, bg="#141414")
+
+    frame_filmes.bind(
+        "<Configure>",
+        lambda e: canvas.configure(scrollregion=canvas.bbox("all"))
+    )
+
+    canvas.create_window((0, 0), window=frame_filmes, anchor="nw")
+    canvas.configure(yscrollcommand=scrollbar.set)
+
+    canvas.pack(side="left", fill="both", expand=True)
+    scrollbar.pack(side="right", fill="y")
 
     def mostrar_filmes(lista):
-
+        # Limpa o frame de filmes e as referências antigas de imagem
         for widget in frame_filmes.winfo_children():
             widget.destroy()
+        janela_menu.references.clear()
 
         linha = 0
         coluna = 0
 
         for filme in lista:
-
             card = tk.Frame(
                 frame_filmes,
                 bg="#222222",
@@ -187,25 +205,53 @@ def abrir_menu_principal(nome_usuario):
                 relief="raised",
                 bd=2
             )
+            card.grid(row=linha, column=coluna, padx=20, pady=20)
 
-            card.grid(row=linha,column=coluna,padx=20,pady=20)
+            # Lógica para carregar a imagem real enviada
+            img_tk = None
+            if filme["imagem"] and os.path.exists(filme["imagem"]):
+                try:
+                    img_pillow = Image.open(filme["imagem"])
+                    # Redimensiona mantendo a proporção aproximada do card do botão original
+                    img_pillow = img_pillow.resize((160, 160), Image.Resampling.LANCEZOR)
+                    img_tk = ImageTk.PhotoImage(img_pillow)
+                    janela_menu.references.append(img_tk)  # Mantém referência ativa
+                except Exception as e:
+                    print(f"Erro ao carregar {filme['imagem']}: {e}")
 
-            # Botão da imagem
-            botao = tk.Button(
-                card,
-                text="Imagem\n(Poster)",
-                width=20,
-                height=10,
-                bg="#555555",
-                fg="white",
-                command=lambda f=filme: messagebox.showinfo(
-                    f["nome"],
-                    f"{f['nome']}\n\n"
-                    f"Ano: {f['ano']}\n"
-                    f"Gênero: {f['genero']}\n\n"
-                    f"{f['descricao']}"
+            # Botão modificado: Se houver imagem, exibe a imagem; caso contrário, exibe o texto padrão
+            if img_tk:
+                botao = tk.Button(
+                    card,
+                    image=img_tk,
+                    bg="#555555",
+                    activebackground="#333333",
+                    bd=0,
+                    command=lambda f=filme: messagebox.showinfo(
+                        f["nome"],
+                        f"{f['nome']}\n\n"
+                        f"Ano: {f['ano']}\n"
+                        f"Gênero: {f['genero']}\n\n"
+                        f"{f['descricao']}"
+                    )
                 )
-            )
+            else:
+                botao = tk.Button(
+                    card,
+                    text="Imagem\n(Poster)",
+                    width=22,
+                    height=10,
+                    bg="#555555",
+                    fg="white",
+                    font=("Arial", 10),
+                    command=lambda f=filme: messagebox.showinfo(
+                        f["nome"],
+                        f"{f['nome']}\n\n"
+                        f"Ano: {f['ano']}\n"
+                        f"Gênero: {f['genero']}\n\n"
+                        f"{f['descricao']}"
+                    )
+                )
 
             botao.pack()
 
@@ -214,7 +260,7 @@ def abrir_menu_principal(nome_usuario):
                 text=filme["nome"],
                 bg="#222222",
                 fg="white",
-                font=("Arial",12,"bold"),
+                font=("Arial", 12, "bold"),
                 wraplength=180
             ).pack(pady=5)
 
@@ -223,25 +269,20 @@ def abrir_menu_principal(nome_usuario):
                 text=f"{filme['ano']} • {filme['genero']}",
                 bg="#222222",
                 fg="#AAAAAA",
-                font=("Arial",10)
+                font=("Arial", 10)
             ).pack()
 
             coluna += 1
-
             if coluna == 3:
                 coluna = 0
                 linha += 1
 
     def pesquisar():
-
         texto = entrada.get().lower()
-
         encontrados = []
-
         for filme in filmes:
             if texto in filme["nome"].lower():
                 encontrados.append(filme)
-
         mostrar_filmes(encontrados)
 
     tk.Button(
@@ -249,7 +290,7 @@ def abrir_menu_principal(nome_usuario):
         text="Pesquisar",
         bg="#E50914",
         fg="white",
-        font=("Arial",12,"bold"),
+        font=("Arial", 12, "bold"),
         command=pesquisar
     ).pack(side="left")
 
