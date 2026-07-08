@@ -2,6 +2,7 @@ import os
 import tkinter as tk
 from tkinter import messagebox
 from tkinter import ttk
+from filme import abrir_filme
 
 ARQUIVO_DB = "UsuariosSalvos.txt"
 usuarios_db = {}
@@ -168,47 +169,34 @@ def abrir_menu_principal(nome_usuario):
         coluna = 0
 
         for filme in lista:
-            card = tk.Frame(frame_filmes, bg="#222222", padx=10, pady=10, relief="raised", bd=2)
-            card.grid(row=linha, column=coluna, padx=20, pady=20)
 
-            img_tk = None
-            if filme["imagem"] and os.path.exists(filme["imagem"]):
-                try:
-                    
-                    img_tk = tk.PhotoImage(file=filme["imagem"])
-                    
-                
-                    if img_tk.width() > 300:
-                        img_tk = img_tk.subsample(4, 4)
-                        
-                    janela_menu.references.append(img_tk)
-                except Exception as e:
-                    print(f"Erro ao carregar {filme['imagem']}: {e}")
+            card = tk.Frame(
+                frame_filmes,
+                bg="#222222",
+                padx=10,
+                pady=10,
+                relief="raised",
+                bd=2
+            )
 
-            if img_tk:
-                botao = tk.Button(
-                    card,
-                    image=img_tk,
-                    bg="#555555",
-                    activebackground="#333333",
-                    bd=0,
-                    command=lambda f=filme: messagebox.showinfo(
-                        f["nome"], f"{f['nome']}\n\nAno: {f['ano']}\nGênero: {f['genero']}\n\n{f['descricao']}"
-                    )
+            card.grid(row=linha,column=coluna,padx=20,pady=20)
+
+            # Botão da imagem
+            botao = tk.Button(
+                card,
+                text="Imagem\n(Poster)",
+                width=20,
+                height=10,
+                bg="#555555",
+                fg="white",
+                command=lambda f=filme: messagebox.showinfo(
+                    f["nome"],
+                    f"{f['nome']}\n\n"
+                    f"Ano: {f['ano']}\n"
+                    f"Gênero: {f['genero']}\n\n"
+                    f"{f['descricao']}"
                 )
-            else:
-                botao = tk.Button(
-                    card,
-                    text="Imagem\n(Poster)",
-                    width=22,
-                    height=10,
-                    bg="#555555",
-                    fg="white",
-                    font=("Arial", 10),
-                    command=lambda f=filme: messagebox.showinfo(
-                        f["nome"], f"{f['nome']}\n\nAno: {f['ano']}\nGênero: {f['genero']}\n\n{f['descricao']}"
-                    )
-                )
+            )
 
             botao.pack()
 
