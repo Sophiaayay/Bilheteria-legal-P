@@ -1,6 +1,8 @@
 import os
 import tkinter as tk
 from tkinter import messagebox
+from tkinter import ttk
+from PIL import Image, ImageTk
 
 ARQUIVO_DB = "UsuariosSalvos.txt"
 usuarios_db = {}
@@ -75,45 +77,183 @@ def limpar_campos(*entries):
 
 def abrir_menu_principal(nome_usuario):
     janela_menu = tk.Toplevel()
-    janela_menu.title("PobreFlix - Menu Principal")
+    janela_menu.title("PobreFlix")
     janela_menu.configure(bg="#141414")
-    centralizar_janela(janela_menu, 1920, 1080)
+    largura = janela_menu.winfo_screenwidth()
+    altura = janela_menu.winfo_screenheight()
+    janela_menu.geometry(f"{largura}x{altura}+0+0")  # tela cheia
 
-    janela_menu.protocol("WM_DELETE_WINDOW", janela.destroy)
+    # --------------------------
+    # Catálogo de Filmes
+    # --------------------------
+    filmes = [
+        {
+            "nome": "Interestelar",
+            "ano": "2014",
+            "genero": "Ficção Científica",
+            "descricao": "Uma equipe viaja pelo espaço em busca de um novo lar para a humanidade.",
+            "imagem": None
+        },
+        {
+            "nome": "Vingadores: Ultimato",
+            "ano": "2019",
+            "genero": "Ação",
+            "descricao": "Os heróis enfrentam Thanos pela última vez.",
+            "imagem": None
+        },
+        {
+            "nome": "Coringa",
+            "ano": "2019",
+            "genero": "Drama",
+            "descricao": "A origem do maior vilão de Gotham.",
+            "imagem": None
+        },
+        {
+            "nome": "Avatar",
+            "ano": "2009",
+            "genero": "Ficção",
+            "descricao": "Um ex-fuzileiro chega ao planeta Pandora.",
+            "imagem": None
+        },
+        {
+            "nome": "Matrix",
+            "ano": "1999",
+            "genero": "Sci-Fi",
+            "descricao": "Neo descobre a verdade sobre o mundo.",
+            "imagem": None
+        },
+        {
+            "nome": "Homem-Aranha: Sem Volta para Casa",
+            "ano": "2021",
+            "genero": "Ação",
+            "descricao": "Peter Parker enfrenta o multiverso.",
+            "imagem": None
+        }
+    ]
 
-    tk.Label(
-        janela_menu, 
-        text=f"Olá, {nome_usuario}!", 
-        font=("Arial", 20, "bold"), 
-        bg="#141414", 
-        fg="#E50914"
-    ).pack(pady=30, padx=10, anchor="nw")
+    # --------------------------
+    # Barra Superior
+    # --------------------------
 
-    tk.Label(
-        janela_menu, 
-        text="O que você deseja fazer hoje?", 
-        font=("Arial", 12), 
-        bg="#141414", 
-        fg="white"
-    ).pack(pady=10,padx=10, anchor="nw")
+    topo = tk.Frame(janela_menu, bg="#141414")
+    topo.pack(fill="x")
 
-
-    def acao_pesquisar():
-        messagebox.showinfo("Pesquisar", "Abrindo a barra de pesquisa de títulos...")
-
-    btn_pesquisar = tk.Button(
-        janela_menu,
-        text="🔍 Pesquisar",
-        font=("Arial", 14, "bold"),
-        bg="#333333",
-        fg="white",
-        width=20,
-        height=2,
-        bd=3,
-        cursor="hand2",
-        command=acao_pesquisar
+    titulo = tk.Label(
+        topo,
+        text="POBREFLIX",
+        fg="#E50914",
+        bg="#141414",
+        font=("Arial", 30, "bold")
     )
-    btn_pesquisar.pack(pady=15, padx=10, anchor="nw")
+    titulo.pack(side="left", padx=20, pady=20)
+
+    usuario = tk.Label(
+        topo,
+        text=f"Olá, {nome_usuario}",
+        fg="white",
+        bg="#141414",
+        font=("Arial",16)
+    )
+    usuario.pack(side="right", padx=20)
+
+    # --------------------------
+    # Pesquisa
+    # --------------------------
+
+    frame_pesquisa = tk.Frame(janela_menu,bg="#141414")
+    frame_pesquisa.pack(fill="x", pady=10)
+
+    entrada = tk.Entry(frame_pesquisa,font=("Arial",14),width=40)
+    entrada.pack(side="left", padx=20)
+
+    frame_filmes = tk.Frame(janela_menu,bg="#141414")
+    frame_filmes.pack(fill="both", expand=True)
+
+    def mostrar_filmes(lista):
+
+        for widget in frame_filmes.winfo_children():
+            widget.destroy()
+
+        linha = 0
+        coluna = 0
+
+        for filme in lista:
+
+            card = tk.Frame(
+                frame_filmes,
+                bg="#222222",
+                padx=10,
+                pady=10,
+                relief="raised",
+                bd=2
+            )
+
+            card.grid(row=linha,column=coluna,padx=20,pady=20)
+
+            # Botão da imagem
+            botao = tk.Button(
+                card,
+                text="Imagem\n(Poster)",
+                width=20,
+                height=10,
+                bg="#555555",
+                fg="white",
+                command=lambda f=filme: messagebox.showinfo(
+                    f["nome"],
+                    f"{f['nome']}\n\n"
+                    f"Ano: {f['ano']}\n"
+                    f"Gênero: {f['genero']}\n\n"
+                    f"{f['descricao']}"
+                )
+            )
+
+            botao.pack()
+
+            tk.Label(
+                card,
+                text=filme["nome"],
+                bg="#222222",
+                fg="white",
+                font=("Arial",12,"bold"),
+                wraplength=180
+            ).pack(pady=5)
+
+            tk.Label(
+                card,
+                text=f"{filme['ano']} • {filme['genero']}",
+                bg="#222222",
+                fg="#AAAAAA",
+                font=("Arial",10)
+            ).pack()
+
+            coluna += 1
+
+            if coluna == 3:
+                coluna = 0
+                linha += 1
+
+    def pesquisar():
+
+        texto = entrada.get().lower()
+
+        encontrados = []
+
+        for filme in filmes:
+            if texto in filme["nome"].lower():
+                encontrados.append(filme)
+
+        mostrar_filmes(encontrados)
+
+    tk.Button(
+        frame_pesquisa,
+        text="Pesquisar",
+        bg="#E50914",
+        fg="white",
+        font=("Arial",12,"bold"),
+        command=pesquisar
+    ).pack(side="left")
+
+    mostrar_filmes(filmes)
 
 
 janela = tk.Tk()
