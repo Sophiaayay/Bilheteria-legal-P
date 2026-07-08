@@ -115,7 +115,7 @@ def abrir_filme(filme, nome_usuario):
 
                 def reservar(c=chave_reserva, n=nome_assento):
                     resposta = messagebox.askyesno("Confirmar Reserva", f"Deseja reservar o assento {n}?")
-                    if respuesta:
+                    if resposta:
                         salvar_assento_ocupado(c, nome_usuario)
                         messagebox.showinfo("Sucesso!", f"Assento {n} reservado com sucesso!")
                         # Força a atualização da tela atualizando o mapa imediatamente

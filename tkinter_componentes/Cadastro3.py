@@ -2,7 +2,6 @@ import os
 import tkinter as tk
 from tkinter import messagebox
 from tkinter import ttk
-from PIL import Image, ImageTk
 from filme import abrir_filme
 
 ARQUIVO_DB = "UsuariosSalvos.txt"
