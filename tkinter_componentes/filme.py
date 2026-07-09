@@ -40,7 +40,7 @@ def abrir_filme(filme, nome_usuario):
 
     lbl_imagem = tk.Label(
         frame_info,
-        text="[ Poster ]",
+        text="[imagem]",
         bg="#333333",
         fg="white",
         font=("Arial", 14),

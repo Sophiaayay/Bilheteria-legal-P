@@ -2,7 +2,6 @@ import os
 import tkinter as tk
 from tkinter import messagebox
 from tkinter import ttk
-from PIL import Image, ImageTk
 from filme import abrir_filme
 
 ARQUIVO_DB = "UsuariosSalvos.txt"
@@ -82,59 +81,54 @@ def abrir_menu_principal(nome_usuario):
     janela_menu.configure(bg="#141414")
     largura = janela_menu.winfo_screenwidth()
     altura = janela_menu.winfo_screenheight()
-    janela_menu.geometry(f"{largura}x{altura}+0+0")  # tela cheia
+    janela_menu.geometry(f"{largura}x{altura}+0+0")
 
-    # --------------------------
-    # Catálogo de Filmes
-    # --------------------------
+   
     filmes = [
         {
-            "nome": "Interestelar",
-            "ano": "2014",
-            "genero": "Ficção Científica",
-            "descricao": "Uma equipe viaja pelo espaço em busca de um novo lar para a humanidade.",
-            "imagem": None
+            "nome": "invocação da inteligencia",
+            "ano": "2025",
+            "genero": "Terror, suspense",
+            "descricao": "Um jovem de info2m que invoca a inteligência.",
+            "imagem": "c:\\Users\\Usuario\\Desktop\\fotos poo\\invocacao.png"
         },
         {
-            "nome": "Vingadores: Ultimato",
-            "ano": "2019",
-            "genero": "Ação",
-            "descricao": "Os heróis enfrentam Thanos pela última vez.",
-            "imagem": None
+            "nome": "Death note: o último domingo à noite",
+            "ano": "2020",
+            "genero": "Ação, suspense",
+            "descricao": "onde Kira enfrenta o lobo pidão.",
+            "imagem": "c:\\Users\\Usuario\\Desktop\\fotos poo\\deathnote.png"
         },
         {
-            "nome": "Coringa",
-            "ano": "2019",
-            "genero": "Drama",
-            "descricao": "A origem do maior vilão de Gotham.",
-            "imagem": None
+            "nome": "Piscininha amor",
+            "ano": "2026",
+            "genero": "Terror psicológico, suspense, drama",
+            "descricao": "Apenas uma confraternização entre alunos, oq pode dar errado?.",
+            "imagem": "c:\\Users\\Usuario\\Desktop\\fotos poo\\party at the bottom of the pool.png"
         },
         {
-            "nome": "Avatar",
+            "nome": "Duas Noites com o Alfredo",
             "ano": "2009",
-            "genero": "Ficção",
-            "descricao": "Um ex-fuzileiro chega ao planeta Pandora.",
-            "imagem": None
+            "genero": "Ficção científica, comédia",
+            "descricao": "Um salário bom e apenas duas noites de turno... parece um sonho.",
+            "imagem": "c:\\Users\\Usuario\\Desktop\\fotos poo\\usdh.png"
         },
         {
-            "nome": "Matrix",
-            "ano": "1999",
-            "genero": "Sci-Fi",
-            "descricao": "Neo descobre a verdade sobre o mundo.",
-            "imagem": None
+            "nome": "Lobo pidão: A origem",
+            "ano": "2999",
+            "genero": "baseado em fatos reais",
+            "descricao": "Cansado do domingo a noite, o lobo pidão enfrenta seu maior inimigo: segunda-feira.",
+            "imagem": "c:\\Users\\Usuario\\Desktop\\fotos poo\\pidao.png"
         },
         {
-            "nome": "Homem-Aranha: Sem Volta para Casa",
-            "ano": "2021",
+            "nome": "homem aranha: Deu ruim na volta pra casa",
+            "ano": "2018",
             "genero": "Ação",
             "descricao": "Peter Parker enfrenta o multiverso.",
-            "imagem": None
+            "imagem": "c:\\Users\\Usuario\\Desktop\\fotos poo\\download.png"
         }
     ]
 
-    # --------------------------
-    # Barra Superior
-    # --------------------------
 
     topo = tk.Frame(janela_menu, bg="#141414")
     topo.pack(fill="x")
@@ -157,9 +151,7 @@ def abrir_menu_principal(nome_usuario):
     )
     usuario.pack(side="right", padx=20)
 
-    # --------------------------
-    # Pesquisa
-    # --------------------------
+
 
     frame_pesquisa = tk.Frame(janela_menu,bg="#141414")
     frame_pesquisa.pack(fill="x", pady=10)
@@ -189,18 +181,38 @@ def abrir_menu_principal(nome_usuario):
                 bd=2
             )
 
-            card.grid(row=linha,column=coluna,padx=20,pady=20)
+            card.grid(row=linha, column=coluna, padx=20, pady=20)
 
-            # Botão da imagem
-            botao = tk.Button(
-                card,
-                text="Imagem\n(Poster)",
-                width=20,
-                height=10,
-                bg="#555555",
-                fg="white",
-                command=lambda f=filme: abrir_filme(f, nome_usuario) # Correção aqui
-            )
+            imagem_tkinter = None
+            if filme["imagem"] and os.path.exists(filme["imagem"]):
+                try:
+                    imagem_tkinter = tk.PhotoImage(file=filme["imagem"])
+                
+                    imagem_tkinter = imagem_tkinter.subsample(6, 6) 
+
+                    filme["_foto_referencia"] = imagem_tkinter
+                except Exception as e:
+                    print(f"Erro ao carregar a imagem de {filme['nome']}: {e}")
+
+            if imagem_tkinter:
+                botao = tk.Button(
+                    card,
+                    image=imagem_tkinter,
+                    width=110,  
+                    height=130, 
+                    bg="#555555",
+                    command=lambda f=filme: abrir_filme(f, nome_usuario)
+                )
+            else:
+                botao = tk.Button(
+                    card,
+                    text="Sem Imagem",
+                    width=15, 
+                    height=8,   
+                    bg="#555555",
+                    fg="white",
+                    command=lambda f=filme: abrir_filme(f, nome_usuario)
+                )
 
             botao.pack()
 
@@ -209,8 +221,8 @@ def abrir_menu_principal(nome_usuario):
                 text=filme["nome"],
                 bg="#222222",
                 fg="white",
-                font=("Arial",12,"bold"),
-                wraplength=180
+                font=("Arial", 12, "bold"),
+                wraplength=160
             ).pack(pady=5)
 
             tk.Label(
@@ -218,8 +230,20 @@ def abrir_menu_principal(nome_usuario):
                 text=f"{filme['ano']} • {filme['genero']}",
                 bg="#222222",
                 fg="#AAAAAA",
-                font=("Arial",10)
+                font=("Arial", 10),
+                wraplength=160
             ).pack()
+
+            tk.Label(
+                card,
+                text=filme["descricao"],
+                bg="#222222",
+                fg="white",
+                font=("Arial", 10),
+                wraplength=160,
+                justify="left",
+                height=3 
+            ).pack(pady=5)
 
             coluna += 1
 
