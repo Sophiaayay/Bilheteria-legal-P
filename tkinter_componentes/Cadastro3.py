@@ -90,42 +90,42 @@ def abrir_menu_principal(nome_usuario):
             "ano": "2025",
             "genero": "Terror, suspense",
             "descricao": "Um jovem de info2m que invoca a inteligência.",
-            "imagem": "c:\\Users\\Usuario\\Desktop\\fotos poo\\invocacao.png"
+            "imagem": "C:\\Users\\Usuario\\Documents\\GitHub\\Bilheteria-legal-P\\fotos poo\\invocacao.png"
         },
         {
             "nome": "Death note: o último domingo à noite",
             "ano": "2020",
             "genero": "Ação, suspense",
             "descricao": "onde Kira enfrenta o lobo pidão.",
-            "imagem": "c:\\Users\\Usuario\\Desktop\\fotos poo\\deathnote.png"
+            "imagem": "C:\\Users\\Usuario\\Documents\\GitHub\\Bilheteria-legal-P\\fotos poo\\deathnote.png"
         },
         {
             "nome": "Piscininha amor",
             "ano": "2026",
             "genero": "Terror psicológico, suspense, drama",
             "descricao": "Apenas uma confraternização entre alunos, oq pode dar errado?.",
-            "imagem": "c:\\Users\\Usuario\\Desktop\\fotos poo\\party at the bottom of the pool.png"
+            "imagem": "C:\\Users\\Usuario\\Documents\\GitHub\\Bilheteria-legal-P\\fotos poo\\party at the bottom of the pool.png"
         },
         {
             "nome": "Duas Noites com o Alfredo",
             "ano": "2009",
             "genero": "Ficção científica, comédia",
             "descricao": "Um salário bom e apenas duas noites de turno... parece um sonho.",
-            "imagem": "c:\\Users\\Usuario\\Desktop\\fotos poo\\usdh.png"
+            "imagem": "C:\\Users\\Usuario\\Documents\\GitHub\\Bilheteria-legal-P\\fotos poo\\usdh.png"
         },
         {
             "nome": "Lobo pidão: A origem",
             "ano": "2999",
             "genero": "baseado em fatos reais",
             "descricao": "Cansado do domingo a noite, o lobo pidão enfrenta seu maior inimigo: segunda-feira.",
-            "imagem": "c:\\Users\\Usuario\\Desktop\\fotos poo\\pidao.png"
+            "imagem": "C:\\Users\\Usuario\\Documents\\GitHub\\Bilheteria-legal-P\\fotos poo\\pidao.png"
         },
         {
             "nome": "homem aranha: Deu ruim na volta pra casa",
             "ano": "2018",
             "genero": "Ação",
             "descricao": "Peter Parker enfrenta o multiverso.",
-            "imagem": "c:\\Users\\Usuario\\Desktop\\fotos poo\\download.png"
+            "imagem": "C:\\Users\\Usuario\\Documents\\GitHub\\Bilheteria-legal-P\\fotos poo\\download.png"
         }
     ]
 

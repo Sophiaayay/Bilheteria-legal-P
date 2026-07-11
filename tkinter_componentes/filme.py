@@ -6,35 +6,29 @@ ARQUIVO_ASSENTOS = "assentos_ocupados.txt"
 
 
 def carregar_assentos_ocupados():
-    """Carrega os assentos que já foram reservados por qualquer usuário."""
     assentos_reservados = {}
     if os.path.exists(ARQUIVO_ASSENTOS):
         with open(ARQUIVO_ASSENTOS, "r", encoding="utf-8") as arquivo:
             for linha in arquivo:
                 linha = linha.strip()
                 if ":" in linha:
-                    # Formato: CHAVE_RESERVA:usuario
                     chave, usuario = linha.split(":", 1)
-                    # Remove espaços extras para evitar erros de comparação
                     assentos_reservados[chave.strip()] = usuario.strip()
     return assentos_reservados
 
 
 def salvar_assento_ocupado(chave_reserva, usuario):
-    """Salva a nova reserva no arquivo de texto."""
     with open(ARQUIVO_ASSENTOS, "a", encoding="utf-8") as arquivo:
         arquivo.write(f"{chave_reserva}:{usuario}\n")
 
 
 def abrir_filme(filme, nome_usuario):
-    """Abre a janela de detalhes do filme e seleção de dias/assentos."""
     janela_filme = tk.Toplevel()
     janela_filme.title(f"PobreFlix - {filme['nome']}")
     janela_filme.configure(bg="#141414")
     janela_filme.geometry("800x650")
     janela_filme.resizable(False, False)
 
-    # --- Seção Superior: Informações do Filme ---
     frame_info = tk.Frame(janela_filme, bg="#141414", padx=20, pady=20)
     frame_info.pack(fill="x")
 
@@ -58,7 +52,6 @@ def abrir_filme(filme, nome_usuario):
     lbl_desc = tk.Label(frame_texto, text=filme["descricao"], fg="white", bg="#141414", font=("Arial", 11), wrap=450, justify="left")
     lbl_desc.pack(anchor="w", pady=10)
 
-    # --- Seção Central: Seleção de Dias ---
     tk.Label(janela_filme, text="Escolha um dia para assistir:", fg="white", bg="#141414", font=("Arial", 14, "bold")).pack(pady=10)
 
     frame_botoes_dias = tk.Frame(janela_filme, bg="#141414")
@@ -70,7 +63,6 @@ def abrir_filme(filme, nome_usuario):
     frame_mapa_assentos.pack(fill="both", expand=True)
 
     def abrir_mapa_assentos(dia_escolhido):
-        # Limpa o mapa anterior para redesenhar do zero com os dados novos
         for widget in frame_mapa_assentos.winfo_children():
             widget.destroy()
 
@@ -85,31 +77,28 @@ def abrir_filme(filme, nome_usuario):
         grid_assentos = tk.Frame(frame_mapa_assentos, bg="#141414")
         grid_assentos.pack()
 
-        # Força o recarregamento do arquivo txt toda vez que abre o mapa
         assentos_globais = carregar_assentos_ocupados()
 
         for linha in range(4):
             for coluna in range(5):
-                nome_assento = f"{chr(65 + linha)}{coluna + 1}"  # A1, B3...
+                nome_assento = f"{chr(65 + linha)}{coluna + 1}" 
                 
-                # Gerando uma chave limpa e idêntica para salvar/comparar
                 nome_filme_limpo = filme['nome'].replace(" ", "_")
                 dia_limpo = dia_escolhido.replace(" ", "_")
                 chave_reserva = f"{nome_filme_limpo}_{dia_limpo}_{nome_assento}"
 
-                # Verifica quem é o dono da reserva no dicionário global
                 dono_reserva = assentos_globais.get(chave_reserva)
 
                 if dono_reserva == nome_usuario:
-                    cor_fundo = "#4CAF50"  # Verde: Reservado pelo usuário atual
+                    cor_fundo = "#4CAF50" 
                     estado = "disabled"
                     texto_exibir = f"{nome_assento}\n(Meu)"
                 elif dono_reserva is not None:
-                    cor_fundo = "#E50914"  # Vermelho: Ocupado por OUTRA pessoa
+                    cor_fundo = "#E50914" 
                     estado = "disabled"
                     texto_exibir = f"{nome_assento}\n(Ocup.)"
                 else:
-                    cor_fundo = "#555555"  # Cinza: Totalmente disponível
+                    cor_fundo = "#555555" 
                     estado = "normal"
                     texto_exibir = nome_assento
 
@@ -118,7 +107,7 @@ def abrir_filme(filme, nome_usuario):
                     if resposta:
                         salvar_assento_ocupado(c, nome_usuario)
                         messagebox.showinfo("Sucesso!", f"Assento {n} reservado com sucesso!")
-                        # Força a atualização da tela atualizando o mapa imediatamente
+
                         abrir_mapa_assentos(dia_escolhido)
 
                 btn_assento = tk.Button(
