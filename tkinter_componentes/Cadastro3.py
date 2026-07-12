@@ -66,7 +66,8 @@ def fazer_login():
         messagebox.showinfo("Sucesso", f"Bem-vindo, {usuario}!")
         limpar_campos(entry_log_usuario, entry_log_senha)
         
-        janela.withdraw()
+        # Correção: Destrói completamente a janela de login para não dar loop no final
+        janela.destroy()
         abrir_menu_principal(usuario)
     else:
         messagebox.showerror("Erro", "Usuário ou senha inválidos.")
@@ -78,7 +79,8 @@ def limpar_campos(*entries):
 
 
 def abrir_menu_principal(nome_usuario):
-    janela_menu = tk.Toplevel()
+    # Passa a ser o gerenciador de janelas principal oficial do sistema
+    janela_menu = tk.Tk()
     janela_menu.title("PobreFlix - Menu Principal")
     janela_menu.configure(bg="#141414")
     
@@ -92,77 +94,48 @@ def abrir_menu_principal(nome_usuario):
             "ano": "2025",
             "genero": "Terror, suspense",
             "descricao": "Um jovem de info2m que invoca a inteligência.",
-<<<<<<< HEAD
-            "imagem": "c:\\Users\\Usuario\\Desktop\\fotos poo\\invocacao.png",
+            "imagem": "C:\\Users\\Usuario\\Documents\\GitHub\\Bilheteria-legal-P\\fotos poo\\invocacao.png",
             "dias": ["Quarta-feira (20:30)", "Quinta-feira (18:00)"]
-=======
-            "imagem": "C:\\Users\\Usuario\\Documents\\GitHub\\Bilheteria-legal-P\\fotos poo\\invocacao.png"
->>>>>>> fb925a722c08a2ea8460f9d728fd16d100402572
         },
         {
             "nome": "Death Note: O Último Domingo à Noite",
             "ano": "2020",
             "genero": "Ação, suspense",
-<<<<<<< HEAD
             "descricao": "Onde Kira enfrenta o lobo pidão.",
-            "imagem": "c:\\Users\\Usuario\\Desktop\\fotos poo\\deathnote.png",
+            "imagem": "C:\\Users\\Usuario\\Documents\\GitHub\\Bilheteria-legal-P\\fotos poo\\deathnote.png",
             "dias": ["Sexta-feira (21:00)", "Domingo (19:30)"]
-=======
-            "descricao": "onde Kira enfrenta o lobo pidão.",
-            "imagem": "C:\\Users\\Usuario\\Documents\\GitHub\\Bilheteria-legal-P\\fotos poo\\deathnote.png"
->>>>>>> fb925a722c08a2ea8460f9d728fd16d100402572
         },
         {
             "nome": "Piscininha Amor",
             "ano": "2026",
             "genero": "Terror psicológico, suspense, drama",
-<<<<<<< HEAD
             "descricao": "Apenas uma confraternização entre alunos, o que pode dar errado?.",
-            "imagem": "c:\\Users\\Usuario\\Desktop\\fotos poo\\party at the bottom of the pool.png",
+            "imagem": "C:\\Users\\Usuario\\Documents\\GitHub\\Bilheteria-legal-P\\fotos poo\\party at the bottom of the pool.png",
             "dias": ["Quinta-feira (16:00)", "Sábado (22:00)"]
-=======
-            "descricao": "Apenas uma confraternização entre alunos, oq pode dar errado?.",
-            "imagem": "C:\\Users\\Usuario\\Documents\\GitHub\\Bilheteria-legal-P\\fotos poo\\party at the bottom of the pool.png"
->>>>>>> fb925a722c08a2ea8460f9d728fd16d100402572
         },
         {
             "nome": "Duas Noites com o Alfredo",
             "ano": "2009",
             "genero": "Ficção científica, comédia",
             "descricao": "Um salário bom e apenas duas noites de turno... parece um sonho.",
-<<<<<<< HEAD
-            "imagem": "c:\\Users\\Usuario\\Desktop\\fotos poo\\usdh.png",
+            "imagem": "C:\\Users\\Usuario\\Documents\\GitHub\\Bilheteria-legal-P\\fotos poo\\usdh.png",
             "dias": ["Segunda-feira (19:00)", "Terça-feira (19:00)"]
-=======
-            "imagem": "C:\\Users\\Usuario\\Documents\\GitHub\\Bilheteria-legal-P\\fotos poo\\usdh.png"
->>>>>>> fb925a722c08a2ea8460f9d728fd16d100402572
         },
         {
             "nome": "Lobo Pidão: A Origem",
             "ano": "2999",
-<<<<<<< HEAD
             "genero": "Baseado em fatos reais",
             "descricao": "Cansado do domingo a noite, o lobo pidão enfrenta a segunda-feira.",
-            "imagem": "c:\\Users\\Usuario\\Desktop\\fotos poo\\pidao.png",
+            "imagem": "C:\\Users\\Usuario\\Documents\\GitHub\\Bilheteria-legal-P\\fotos poo\\pidao.png",
             "dias": ["Quarta-feira (15:00)", "Sexta-feira (17:30)"]
-=======
-            "genero": "baseado em fatos reais",
-            "descricao": "Cansado do domingo a noite, o lobo pidão enfrenta seu maior inimigo: segunda-feira.",
-            "imagem": "C:\\Users\\Usuario\\Documents\\GitHub\\Bilheteria-legal-P\\fotos poo\\pidao.png"
->>>>>>> fb925a722c08a2ea8460f9d728fd16d100402572
         },
         {
             "nome": "Homem Aranha: Deu Ruim na Volta Pra Casa",
             "ano": "2018",
             "genero": "Ação",
-<<<<<<< HEAD
             "descricao": "Peter Parker enfrenta o multiverso caprichado.",
-            "imagem": "c:\\Users\\Usuario\\Desktop\\fotos poo\\download.png",
+            "imagem": "C:\\Users\\Usuario\\Documents\\GitHub\\Bilheteria-legal-P\\fotos poo\\download.png",
             "dias": ["Sábado (14:00)", "Domingo (16:00)"]
-=======
-            "descricao": "Peter Parker enfrenta o multiverso.",
-            "imagem": "C:\\Users\\Usuario\\Documents\\GitHub\\Bilheteria-legal-P\\fotos poo\\download.png"
->>>>>>> fb925a722c08a2ea8460f9d728fd16d100402572
         }
     ]
 
@@ -216,14 +189,12 @@ def abrir_menu_principal(nome_usuario):
     entrada = tk.Entry(sub_pesquisa, font=("Arial", 14), width=40)
     entrada.pack(side="left", padx=10)
 
-    # --- ÁREA COM SCROLLBAR (Para abaixar a tela) ---
+    # --- ÁREA COM SCROLLBAR ---
     frame_container = tk.Frame(janela_menu, bg="#141414")
     frame_container.pack(fill="both", expand=True, padx=40, pady=10)
 
     canvas = tk.Canvas(frame_container, bg="#141414", highlightthickness=0)
     scrollbar = tk.Scrollbar(frame_container, orient="vertical", command=canvas.yview)
-    
-    # Frame onde os filmes realmente vão ficar dentro do canvas
     frame_rolavel = tk.Frame(canvas, bg="#141414")
 
     frame_rolavel.bind(
@@ -272,12 +243,11 @@ def abrir_menu_principal(nome_usuario):
             tk.Label(card, text=filme["descricao"], bg="#222222", fg="#AAAAAA", font=("Arial", 9), wraplength=160, justify="center", height=3).pack(pady=5)
 
             coluna += 1
-            if coluna == 3:  # 3 colunas de filmes centralizadas
+            if coluna == 3:
                 coluna = 0
                 linha += 1
 
     def intermediario_abrir_filme(f):
-        # Conectamos a ação de atualizar os tickets passando a função como argumento
         abrir_filme(f, nome_usuario, atualizar_mural_tickets)
 
     def pesquisar():
@@ -288,6 +258,7 @@ def abrir_menu_principal(nome_usuario):
     tk.Button(sub_pesquisa, text="Pesquisar", bg="#E50914", fg="white", font=("Arial", 11, "bold"), padx=15, command=pesquisar, relief="flat").pack(side="left")
 
     mostrar_filmes(filmes)
+    janela_menu.mainloop()
 
 
 # --- Sistema de Login e Cadastro Primitivo ---

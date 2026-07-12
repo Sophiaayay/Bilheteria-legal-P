@@ -29,33 +29,22 @@ def carregar_assentos_ocupados():
     return assentos_reservados
 
 
-<<<<<<< HEAD
 def salvar_multiplos_assentos(lista_chaves, usuario):
-=======
-def salvar_assento_ocupado(chave_reserva, usuario):
->>>>>>> fb925a722c08a2ea8460f9d728fd16d100402572
     with open(ARQUIVO_ASSENTOS, "a", encoding="utf-8") as arquivo:
         for chave in lista_chaves:
             arquivo.write(f"{chave}:{usuario}\n")
 
 
-<<<<<<< HEAD
 def abrir_filme(filme, nome_usuario, funcao_atualizar_menu):
-=======
-def abrir_filme(filme, nome_usuario):
->>>>>>> fb925a722c08a2ea8460f9d728fd16d100402572
     janela_filme = tk.Toplevel()
     janela_filme.title(f"PobreFlix - {filme['nome']}")
     janela_filme.configure(bg="#141414")
     janela_filme.geometry("800x720")
     janela_filme.resizable(False, False)
 
-<<<<<<< HEAD
     assentos_selecionados_agora = []
     chaves_para_salvar = []
 
-=======
->>>>>>> fb925a722c08a2ea8460f9d728fd16d100402572
     frame_info = tk.Frame(janela_filme, bg="#141414", padx=20, pady=20)
     frame_info.pack(fill="x")
 
@@ -83,11 +72,7 @@ def abrir_filme(filme, nome_usuario):
     lbl_desc = tk.Label(frame_texto, text=filme["descricao"], fg="white", bg="#141414", font=("Arial", 10), wrap=450, justify="left")
     lbl_desc.pack(anchor="w", pady=5)
 
-<<<<<<< HEAD
     tk.Label(janela_filme, text="Escolha seus assentos:", fg="white", bg="#141414", font=("Arial", 14, "bold")).pack(pady=5)
-=======
-    tk.Label(janela_filme, text="Escolha um dia para assistir:", fg="white", bg="#141414", font=("Arial", 14, "bold")).pack(pady=10)
->>>>>>> fb925a722c08a2ea8460f9d728fd16d100402572
 
     frame_botoes_dias = tk.Frame(janela_filme, bg="#141414")
     frame_botoes_dias.pack()
@@ -99,13 +84,10 @@ def abrir_filme(filme, nome_usuario):
     frame_confirmar.pack(fill="x")
 
     def abrir_mapa_assentos(dia_escolhido):
-<<<<<<< HEAD
         nonlocal assentos_selecionados_agora, chaves_para_salvar
         assentos_selecionados_agora.clear()
         chaves_para_salvar.clear()
 
-=======
->>>>>>> fb925a722c08a2ea8460f9d728fd16d100402572
         for widget in frame_mapa_assentos.winfo_children():
             widget.destroy()
         for widget in frame_confirmar.winfo_children():
@@ -124,23 +106,14 @@ def abrir_filme(filme, nome_usuario):
 
         for linha in range(4):
             for coluna in range(5):
-<<<<<<< HEAD
                 nome_assento = f"{chr(65 + linha)}{coluna + 1}"
                 filme_id = normalizar_chave(filme['nome'])
                 dia_id = normalizar_chave(dia_escolhido)
                 chave_reserva = f"{filme_id}_{dia_id}_{nome_assento}"
-=======
-                nome_assento = f"{chr(65 + linha)}{coluna + 1}" 
-                
-                nome_filme_limpo = filme['nome'].replace(" ", "_")
-                dia_limpo = dia_escolhido.replace(" ", "_")
-                chave_reserva = f"{nome_filme_limpo}_{dia_limpo}_{nome_assento}"
->>>>>>> fb925a722c08a2ea8460f9d728fd16d100402572
 
                 dono_reserva = assentos_globais.get(chave_reserva)
 
                 if dono_reserva == nome_usuario:
-<<<<<<< HEAD
                     cor_fundo, estado, texto_exibir = "#4CAF50", "disabled", f"{nome_assento}\n(Meu)"
                 elif dono_reserva is not None:
                     cor_fundo, estado, texto_exibir = "#E50914", "disabled", f"{nome_assento}\n(Ocup.)"
@@ -156,32 +129,12 @@ def abrir_filme(filme, nome_usuario):
                         assentos_selecionados_agora.append(n)
                         chaves_para_salvar.append(c)
                         btn.config(bg="#FFC107", text=f"{n}\n(Selec.)")
-=======
-                    cor_fundo = "#4CAF50" 
-                    estado = "disabled"
-                    texto_exibir = f"{nome_assento}\n(Meu)"
-                elif dono_reserva is not None:
-                    cor_fundo = "#E50914" 
-                    estado = "disabled"
-                    texto_exibir = f"{nome_assento}\n(Ocup.)"
-                else:
-                    cor_fundo = "#555555" 
-                    estado = "normal"
-                    texto_exibir = nome_assento
-
-                def reservar(c=chave_reserva, n=nome_assento):
-                    resposta = messagebox.askyesno("Confirmar Reserva", f"Deseja reservar o assento {n}?")
-                    if resposta:
-                        salvar_assento_ocupado(c, nome_usuario)
-                        messagebox.showinfo("Sucesso!", f"Assento {n} reservado com sucesso!")
-
-                        abrir_mapa_assentos(dia_escolhido)
->>>>>>> fb925a722c08a2ea8460f9d728fd16d100402572
 
                 btn_assento = tk.Button(
                     grid_assentos, text=texto_exibir, bg=cor_fundo, fg="white",
                     font=("Arial", 9, "bold"), width=9, height=2, state=estado
                 )
+                # Configuração corrigida associando o evento à alternância correta
                 btn_assento.config(command=lambda b=btn_assento, c=chave_reserva, n=nome_assento: alternar_selecao(b, c, n))
                 btn_assento.grid(row=linha, column=coluna, padx=6, pady=6)
 
@@ -193,7 +146,6 @@ def abrir_filme(filme, nome_usuario):
             salvar_multiplos_assentos(chaves_para_salvar, nome_usuario)
             janela_filme.destroy()
             
-            # Encaminha as seleções juntamente com o gatilho do Menu
             abrir_pagamento(
                 filme['nome'], 
                 dia_escolhido, 
@@ -215,6 +167,5 @@ def abrir_filme(filme, nome_usuario):
         )
         btn_dia.pack(side="left", padx=10)
 
-    # Força carregar automaticamente os assentos do primeiro dia disponível para não abrir em branco
     if dias_do_filme:
         abrir_mapa_assentos(dias_do_filme[0])
