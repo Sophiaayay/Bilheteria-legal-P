@@ -92,48 +92,77 @@ def abrir_menu_principal(nome_usuario):
             "ano": "2025",
             "genero": "Terror, suspense",
             "descricao": "Um jovem de info2m que invoca a inteligência.",
+<<<<<<< HEAD
             "imagem": "c:\\Users\\Usuario\\Desktop\\fotos poo\\invocacao.png",
             "dias": ["Quarta-feira (20:30)", "Quinta-feira (18:00)"]
+=======
+            "imagem": "C:\\Users\\Usuario\\Documents\\GitHub\\Bilheteria-legal-P\\fotos poo\\invocacao.png"
+>>>>>>> fb925a722c08a2ea8460f9d728fd16d100402572
         },
         {
             "nome": "Death Note: O Último Domingo à Noite",
             "ano": "2020",
             "genero": "Ação, suspense",
+<<<<<<< HEAD
             "descricao": "Onde Kira enfrenta o lobo pidão.",
             "imagem": "c:\\Users\\Usuario\\Desktop\\fotos poo\\deathnote.png",
             "dias": ["Sexta-feira (21:00)", "Domingo (19:30)"]
+=======
+            "descricao": "onde Kira enfrenta o lobo pidão.",
+            "imagem": "C:\\Users\\Usuario\\Documents\\GitHub\\Bilheteria-legal-P\\fotos poo\\deathnote.png"
+>>>>>>> fb925a722c08a2ea8460f9d728fd16d100402572
         },
         {
             "nome": "Piscininha Amor",
             "ano": "2026",
             "genero": "Terror psicológico, suspense, drama",
+<<<<<<< HEAD
             "descricao": "Apenas uma confraternização entre alunos, o que pode dar errado?.",
             "imagem": "c:\\Users\\Usuario\\Desktop\\fotos poo\\party at the bottom of the pool.png",
             "dias": ["Quinta-feira (16:00)", "Sábado (22:00)"]
+=======
+            "descricao": "Apenas uma confraternização entre alunos, oq pode dar errado?.",
+            "imagem": "C:\\Users\\Usuario\\Documents\\GitHub\\Bilheteria-legal-P\\fotos poo\\party at the bottom of the pool.png"
+>>>>>>> fb925a722c08a2ea8460f9d728fd16d100402572
         },
         {
             "nome": "Duas Noites com o Alfredo",
             "ano": "2009",
             "genero": "Ficção científica, comédia",
             "descricao": "Um salário bom e apenas duas noites de turno... parece um sonho.",
+<<<<<<< HEAD
             "imagem": "c:\\Users\\Usuario\\Desktop\\fotos poo\\usdh.png",
             "dias": ["Segunda-feira (19:00)", "Terça-feira (19:00)"]
+=======
+            "imagem": "C:\\Users\\Usuario\\Documents\\GitHub\\Bilheteria-legal-P\\fotos poo\\usdh.png"
+>>>>>>> fb925a722c08a2ea8460f9d728fd16d100402572
         },
         {
             "nome": "Lobo Pidão: A Origem",
             "ano": "2999",
+<<<<<<< HEAD
             "genero": "Baseado em fatos reais",
             "descricao": "Cansado do domingo a noite, o lobo pidão enfrenta a segunda-feira.",
             "imagem": "c:\\Users\\Usuario\\Desktop\\fotos poo\\pidao.png",
             "dias": ["Quarta-feira (15:00)", "Sexta-feira (17:30)"]
+=======
+            "genero": "baseado em fatos reais",
+            "descricao": "Cansado do domingo a noite, o lobo pidão enfrenta seu maior inimigo: segunda-feira.",
+            "imagem": "C:\\Users\\Usuario\\Documents\\GitHub\\Bilheteria-legal-P\\fotos poo\\pidao.png"
+>>>>>>> fb925a722c08a2ea8460f9d728fd16d100402572
         },
         {
             "nome": "Homem Aranha: Deu Ruim na Volta Pra Casa",
             "ano": "2018",
             "genero": "Ação",
+<<<<<<< HEAD
             "descricao": "Peter Parker enfrenta o multiverso caprichado.",
             "imagem": "c:\\Users\\Usuario\\Desktop\\fotos poo\\download.png",
             "dias": ["Sábado (14:00)", "Domingo (16:00)"]
+=======
+            "descricao": "Peter Parker enfrenta o multiverso.",
+            "imagem": "C:\\Users\\Usuario\\Documents\\GitHub\\Bilheteria-legal-P\\fotos poo\\download.png"
+>>>>>>> fb925a722c08a2ea8460f9d728fd16d100402572
         }
     ]
 
