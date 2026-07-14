@@ -94,7 +94,7 @@ def abrir_menu_principal(nome_usuario):
             "ano": "2025",
             "genero": "Terror, suspense",
             "descricao": "Um jovem de info2m que invoca a inteligência.",
-            "imagem": "C:\\Users\\Usuario\\Documents\\GitHub\\Bilheteria-legal-P\\fotos poo\\invocacao.png",
+            "imagem": "fotos poo/invocacao.png",
             "dias": ["Quarta-feira (20:30)", "Quinta-feira (18:00)"]
         },
         {
@@ -102,7 +102,7 @@ def abrir_menu_principal(nome_usuario):
             "ano": "2020",
             "genero": "Ação, suspense",
             "descricao": "Onde Kira enfrenta o lobo pidão.",
-            "imagem": "C:\\Users\\Usuario\\Documents\\GitHub\\Bilheteria-legal-P\\fotos poo\\deathnote.png",
+            "imagem": "fotos poo/deathnote.png",
             "dias": ["Sexta-feira (21:00)", "Domingo (19:30)"]
         },
         {
@@ -110,7 +110,7 @@ def abrir_menu_principal(nome_usuario):
             "ano": "2026",
             "genero": "Terror psicológico, suspense, drama",
             "descricao": "Apenas uma confraternização entre alunos, o que pode dar errado?.",
-            "imagem": "C:\\Users\\Usuario\\Documents\\GitHub\\Bilheteria-legal-P\\fotos poo\\party at the bottom of the pool.png",
+            "imagem": "fotos poo/Party at the bottom of the pool.png",
             "dias": ["Quinta-feira (16:00)", "Sábado (22:00)"]
         },
         {
@@ -118,7 +118,7 @@ def abrir_menu_principal(nome_usuario):
             "ano": "2009",
             "genero": "Ficção científica, comédia",
             "descricao": "Um salário bom e apenas duas noites de turno... parece um sonho.",
-            "imagem": "C:\\Users\\Usuario\\Documents\\GitHub\\Bilheteria-legal-P\\fotos poo\\usdh.png",
+            "imagem": "fotos poo/usdh.png",
             "dias": ["Segunda-feira (19:00)", "Terça-feira (19:00)"]
         },
         {
@@ -126,7 +126,7 @@ def abrir_menu_principal(nome_usuario):
             "ano": "2999",
             "genero": "Baseado em fatos reais",
             "descricao": "Cansado do domingo a noite, o lobo pidão enfrenta a segunda-feira.",
-            "imagem": "C:\\Users\\Usuario\\Documents\\GitHub\\Bilheteria-legal-P\\fotos poo\\pidao.png",
+            "imagem": "fotos poo/pidao.png",
             "dias": ["Quarta-feira (15:00)", "Sexta-feira (17:30)"]
         },
         {
@@ -134,12 +134,11 @@ def abrir_menu_principal(nome_usuario):
             "ano": "2018",
             "genero": "Ação",
             "descricao": "Peter Parker enfrenta o multiverso caprichado.",
-            "imagem": "C:\\Users\\Usuario\\Documents\\GitHub\\Bilheteria-legal-P\\fotos poo\\download.png",
+            "imagem": "fotos poo/download.png",
             "dias": ["Sábado (14:00)", "Domingo (16:00)"]
         }
     ]
 
-    # --- Barra Superior ---
     topo = tk.Frame(janela_menu, bg="#141414")
     topo.pack(fill="x", padx=40, pady=10)
 
@@ -149,7 +148,6 @@ def abrir_menu_principal(nome_usuario):
     lbl_usuario = tk.Label(topo, text=f"Olá, {nome_usuario}", fg="white", bg="#141414", font=("Arial", 16))
     lbl_usuario.pack(side="right")
 
-    # --- Painel de Tickets Comprados ---
     frame_tickets_mural = tk.LabelFrame(janela_menu, text=" MEUS INGRESSOS ", fg="#4CAF50", bg="#1A1A1A", font=("Arial", 11, "bold"), padx=15, pady=10)
     frame_tickets_mural.pack(fill="x", padx=40, pady=10)
 
@@ -179,7 +177,6 @@ def abrir_menu_principal(nome_usuario):
 
     atualizar_mural_tickets()
 
-    # --- Barra de Pesquisa ---
     frame_pesquisa = tk.Frame(janela_menu, bg="#141414")
     frame_pesquisa.pack(fill="x", padx=40, pady=10)
 
@@ -188,8 +185,6 @@ def abrir_menu_principal(nome_usuario):
 
     entrada = tk.Entry(sub_pesquisa, font=("Arial", 14), width=40)
     entrada.pack(side="left", padx=10)
-
-    # --- ÁREA COM SCROLLBAR ---
     frame_container = tk.Frame(janela_menu, bg="#141414")
     frame_container.pack(fill="both", expand=True, padx=40, pady=10)
 
@@ -261,7 +256,6 @@ def abrir_menu_principal(nome_usuario):
     janela_menu.mainloop()
 
 
-# --- Sistema de Login e Cadastro Primitivo ---
 janela = tk.Tk()
 janela.title("Login e Cadastro")
 janela.configure(bg="#f0f0f0")

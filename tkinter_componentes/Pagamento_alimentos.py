@@ -4,7 +4,7 @@ import random
 
 def abrir_pagamento(filme_nome, dia, assentos, qtd_ingressos, funcao_atualizar_menu):
     janela_pag = tk.Toplevel()
-    janela_pag.title("PobreFlix - Lanche & Pagamento Dinâmico")
+    janela_pag.title("PobreFlix - Lanche e pagamento")
     janela_pag.configure(bg="#141414")
     janela_pag.geometry("550x750")
     janela_pag.resizable(False, False)
@@ -19,7 +19,6 @@ def abrir_pagamento(filme_nome, dia, assentos, qtd_ingressos, funcao_atualizar_m
     variaveis_lanches = {lanche: tk.BooleanVar() for lanche in precos_lanches}
     forma_pagamento = tk.StringVar(value="Pix")
 
-    # --- Resumo Inicial ---
     tk.Label(janela_pag, text="FINALIZAR PEDIDO", fg="#E50914", bg="#141414", font=("Arial", 18, "bold")).pack(pady=10)
     
     frame_resumo = tk.LabelFrame(janela_pag, text=" Itens Escolhidos ", fg="white", bg="#222222", font=("Arial", 10, "bold"), padx=15, pady=8)
@@ -51,7 +50,6 @@ def abrir_pagamento(filme_nome, dia, assentos, qtd_ingressos, funcao_atualizar_m
             font=("Arial", 11), command=atualizar_interface_preco
         ).pack(anchor="w", pady=1)
 
-    # --- Campos Dinâmicos do Pagamento ---
     frame_detalhes_pag = tk.LabelFrame(janela_pag, text=" Dados de Pagamento ", fg="white", bg="#222222", font=("Arial", 10, "bold"), padx=15, pady=10)
     frame_detalhes_pag.pack(fill="x", padx=20, pady=5)
 
@@ -101,14 +99,12 @@ def abrir_pagamento(filme_nome, dia, assentos, qtd_ingressos, funcao_atualizar_m
     lbl_total = tk.Label(janela_pag, text=f"TOTAL A PAGAR: R$ {subtotal_ingressos:.2f}", fg="white", bg="#141414", font=("Arial", 14, "bold"))
     lbl_total.pack(pady=10)
 
-    # --- Geração e Renderização do Ticket Final ---
     def processar_e_gerar_ticket():
         lanches_escolhidos = [l for l, v in variaveis_lanches.items() if v.get()]
         lanches_str = ", ".join(lanches_escolhidos) if lanches_escolhidos else "Nenhum lanche"
         
         codigo_autenticacao = f"PBR-{random.randint(10000, 99999)}-{random.randint(10, 99)}"
 
-        # 1. ATUALIZAÇÃO SINCRO: Importa a lista global e injeta a estrutura correta
         from Cadastro3 import TICKETS_COMPRADOS
         TICKETS_COMPRADOS.append({
             "filme": filme_nome,
@@ -118,7 +114,6 @@ def abrir_pagamento(filme_nome, dia, assentos, qtd_ingressos, funcao_atualizar_m
             "codigo": codigo_autenticacao
         })
 
-        # 2. Executa a rotina remota de renderização imediata do painel de ingressos
         funcao_atualizar_menu()
 
         janela_ticket = tk.Toplevel()

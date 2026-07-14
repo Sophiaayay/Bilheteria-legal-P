@@ -134,7 +134,7 @@ def abrir_filme(filme, nome_usuario, funcao_atualizar_menu):
                     grid_assentos, text=texto_exibir, bg=cor_fundo, fg="white",
                     font=("Arial", 9, "bold"), width=9, height=2, state=estado
                 )
-                # Configuração corrigida associando o evento à alternância correta
+
                 btn_assento.config(command=lambda b=btn_assento, c=chave_reserva, n=nome_assento: alternar_selecao(b, c, n))
                 btn_assento.grid(row=linha, column=coluna, padx=6, pady=6)
 
