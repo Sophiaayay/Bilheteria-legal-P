@@ -1,14 +1,13 @@
 import os
 import tkinter as tk
 from tkinter import messagebox
-from filme import abrir_filme  # Importação ajustada para corresponder ao nome do arquivo 'filmes.py'
+from filme import abrir_filme 
 
 ARQUIVO_DB = "UsuariosSalvos.txt"
 usuarios_db = {}
 
 TICKETS_COMPRADOS = []
 
-# Variáveis globais dos elementos gráficos (definidas como None inicialmente)
 janela = None
 frame_login = None
 frame_cadastro = None
@@ -223,7 +222,6 @@ def abrir_menu_principal(nome_usuario):
                 linha += 1
 
     def intermediario_abrir_filme(f):
-        # Repassando a lista TICKETS_COMPRADOS como parâmetro
         abrir_filme(f, nome_usuario, atualizar_mural_tickets, TICKETS_COMPRADOS)
 
     def pesquisar():

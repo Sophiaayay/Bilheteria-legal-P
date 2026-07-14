@@ -35,7 +35,6 @@ def salvar_multiplos_assentos(lista_chaves, usuario):
             arquivo.write(f"{chave}:{usuario}\n")
 
 
-# Agora a função recebe tickets_comprados_ref como parâmetro
 def abrir_filme(filme, nome_usuario, funcao_atualizar_menu, tickets_comprados_ref):
     janela_filme = tk.Toplevel()
     janela_filme.title(f"PobreFlix - {filme['nome']}")
@@ -108,7 +107,7 @@ def abrir_filme(filme, nome_usuario, funcao_atualizar_menu, tickets_comprados_re
 
         for linha in range(4):
             letra_linha = chr(65 + linha)
-            e_preferencial = (letra_linha == "D")  # Linha D é a preferencial
+            e_preferencial = (letra_linha == "D") 
 
             for coluna in range(5):
                 nome_assento = f"{letra_linha}{coluna + 1}"
@@ -166,7 +165,6 @@ def abrir_filme(filme, nome_usuario, funcao_atualizar_menu, tickets_comprados_re
             salvar_multiplos_assentos(chaves_para_salvar, nome_usuario)
             janela_filme.destroy()
             
-            # Passando o tickets_comprados_ref adiante para o pagamento
             abrir_pagamento(
                 filme['nome'], 
                 dia_escolhido, 

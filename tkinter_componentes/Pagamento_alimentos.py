@@ -2,7 +2,6 @@ import tkinter as tk
 from tkinter import messagebox
 import random
 
-# Agora a função recebe tickets_comprados_ref e não faz nenhuma importação de Cadastro.py
 def abrir_pagamento(filme_nome, dia, assentos, qtd_ingressos, funcao_atualizar_menu, tickets_comprados_ref):
     janela_pag = tk.Toplevel()
     janela_pag.title("PobreFlix - Lanche e pagamento")
@@ -33,12 +32,10 @@ def abrir_pagamento(filme_nome, dia, assentos, qtd_ingressos, funcao_atualizar_m
     lbl_preco_ingressos = tk.Label(frame_resumo, text=f"Valor dos Ingressos: R$ {subtotal_ingressos:.2f}", fg="white", bg="#222222", font=("Arial", 11))
     lbl_preco_ingressos.pack(anchor="w")
 
-    # --- Lanches ---
     frame_lanches = tk.LabelFrame(janela_pag, text=" Adicionar Lanches ", fg="white", bg="#222222", font=("Arial", 10, "bold"), padx=15, pady=5)
     frame_lanches.pack(fill="x", padx=20, pady=10)
 
     def calcular_total_atual():
-        # Desconto de 50% na meia entrada apenas sobre os ingressos
         if var_estudante.get():
             total = subtotal_ingressos * 0.5
         else:
@@ -64,7 +61,6 @@ def abrir_pagamento(filme_nome, dia, assentos, qtd_ingressos, funcao_atualizar_m
             font=("Arial", 11), command=atualizar_interface_preco
         ).pack(anchor="w", pady=1)
 
-    # --- Benefícios/Estudante ---
     frame_descontos = tk.LabelFrame(janela_pag, text=" Benefícios e Descontos ", fg="white", bg="#222222", font=("Arial", 10, "bold"), padx=15, pady=8)
     frame_descontos.pack(fill="x", padx=20, pady=5)
 
@@ -132,7 +128,6 @@ def abrir_pagamento(filme_nome, dia, assentos, qtd_ingressos, funcao_atualizar_m
         codigo_autenticacao = f"PBR-{random.randint(10000, 99999)}-{random.randint(10, 99)}"
         tipo_entrada = "Meia-Entrada (Estudante)" if var_estudante.get() else "Inteira"
 
-        # Salvando usando a referência recebida via argumento
         tickets_comprados_ref.append({
             "filme": filme_nome,
             "dia": dia,
