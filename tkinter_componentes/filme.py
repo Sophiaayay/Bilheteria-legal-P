@@ -39,7 +39,7 @@ def abrir_filme(filme, nome_usuario, funcao_atualizar_menu):
     janela_filme = tk.Toplevel()
     janela_filme.title(f"PobreFlix - {filme['nome']}")
     janela_filme.configure(bg="#141414")
-    janela_filme.geometry("800x720")
+    janela_filme.geometry("800x750")
     janela_filme.resizable(False, False)
 
     assentos_selecionados_agora = []
@@ -93,9 +93,11 @@ def abrir_filme(filme, nome_usuario, funcao_atualizar_menu):
         for widget in frame_confirmar.winfo_children():
             widget.destroy()
 
+        # Legenda atualizada contendo os assentos preferenciais na cor azul
         tk.Label(
             frame_mapa_assentos,
-            text=f"Mapa de Assentos para {dia_escolhido}\n(Cinza = Livre | Amarelo = Selecionando | Vermelho = Ocupado | Verde = Seus antigos)",
+            text=f"Mapa de Assentos para {dia_escolhido}\n"
+                 f"(Cinza = Livre | Azul = Preferencial | Amarelo = Selecionando | Vermelho = Ocupado | Verde = Seus antigos)",
             fg="white", bg="#141414", font=("Arial", 11, "bold")
         ).pack(pady=5)
 
@@ -105,8 +107,12 @@ def abrir_filme(filme, nome_usuario, funcao_atualizar_menu):
         assentos_globais = carregar_assentos_ocupados()
 
         for linha in range(4):
+            letra_linha = chr(65 + linha)
+            # Definindo a última linha (Linha D) como preferencial por lei
+            e_preferencial = (letra_linha == "D")
+
             for coluna in range(5):
-                nome_assento = f"{chr(65 + linha)}{coluna + 1}"
+                nome_assento = f"{letra_linha}{coluna + 1}"
                 filme_id = normalizar_chave(filme['nome'])
                 dia_id = normalizar_chave(dia_escolhido)
                 chave_reserva = f"{filme_id}_{dia_id}_{nome_assento}"
@@ -117,15 +123,33 @@ def abrir_filme(filme, nome_usuario, funcao_atualizar_menu):
                     cor_fundo, estado, texto_exibir = "#4CAF50", "disabled", f"{nome_assento}\n(Meu)"
                 elif dono_reserva is not None:
                     cor_fundo, estado, texto_exibir = "#E50914", "disabled", f"{nome_assento}\n(Ocup.)"
+                elif e_preferencial:
+                    # Assentos preferenciais livres começam em Azul
+                    cor_fundo, estado, texto_exibir = "#1E90FF", "normal", f"{nome_assento}\n(Pref.)"
                 else:
                     cor_fundo, estado, texto_exibir = "#555555", "normal", nome_assento
 
-                def alternar_selecao(btn, c=chave_reserva, n=nome_assento):
+                def alternar_selecao(btn, pref=e_preferencial, c=chave_reserva, n=nome_assento):
                     if n in assentos_selecionados_agora:
                         assentos_selecionados_agora.remove(n)
                         chaves_para_salvar.remove(c)
-                        btn.config(bg="#555555", text=n)
+                        # Retorna para a cor padrão de acordo com a categoria
+                        if pref:
+                            btn.config(bg="#1E90FF", text=f"{n}\n(Pref.)")
+                        else:
+                            btn.config(bg="#555555", text=n)
                     else:
+                        # Se for preferencial, exibe um aviso educacional de confirmação
+                        if pref:
+                            resposta = messagebox.askyesno(
+                                "Assento Preferencial",
+                                f"O assento {n} é reservado preferencialmente para idosos, autistas, "
+                                f"gestantes ou pessoas com deficiência física por direito de lei.\n\n"
+                                f"Deseja selecionar este assento?"
+                            )
+                            if not resposta:
+                                return  # Usuário cancelou a seleção
+
                         assentos_selecionados_agora.append(n)
                         chaves_para_salvar.append(c)
                         btn.config(bg="#FFC107", text=f"{n}\n(Selec.)")
@@ -135,7 +159,7 @@ def abrir_filme(filme, nome_usuario, funcao_atualizar_menu):
                     font=("Arial", 9, "bold"), width=9, height=2, state=estado
                 )
 
-                btn_assento.config(command=lambda b=btn_assento, c=chave_reserva, n=nome_assento: alternar_selecao(b, c, n))
+                btn_assento.config(command=lambda b=btn_assento, p=e_preferencial, c=chave_reserva, n=nome_assento: alternar_selecao(b, p, c, n))
                 btn_assento.grid(row=linha, column=coluna, padx=6, pady=6)
 
         def enviar_para_pagamento():
