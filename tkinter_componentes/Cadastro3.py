@@ -6,7 +6,6 @@ from filme import abrir_filme
 ARQUIVO_DB = "UsuariosSalvos.txt"
 usuarios_db = {}
 
-# Lista global que armazena os tickets comprados na sessão
 TICKETS_COMPRADOS = []
 
 
@@ -66,7 +65,6 @@ def fazer_login():
         messagebox.showinfo("Sucesso", f"Bem-vindo, {usuario}!")
         limpar_campos(entry_log_usuario, entry_log_senha)
         
-        # Correção: Destrói completamente a janela de login para não dar loop no final
         janela.destroy()
         abrir_menu_principal(usuario)
     else:
@@ -79,7 +77,7 @@ def limpar_campos(*entries):
 
 
 def abrir_menu_principal(nome_usuario):
-    # Passa a ser o gerenciador de janelas principal oficial do sistema
+
     janela_menu = tk.Tk()
     janela_menu.title("PobreFlix - Menu Principal")
     janela_menu.configure(bg="#141414")
