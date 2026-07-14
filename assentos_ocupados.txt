@@ -42,6 +42,14 @@ Death_note:_o_último_domingo_à_noite_Sábado_A2:max
 >>>>>>> fb925a722c08a2ea8460f9d728fd16d100402572
 piscininha_amor_quinta_feira_1600_B1:alo
 invocacao_da_inteligência_quarta_feira_2030_A1:alo
+<<<<<<< Updated upstream
 invocacao_da_inteligência_quarta_feira_2030_B2:alo
 invocacao_da_inteligência_quarta_feira_2030_A2:alo
 invocacao_da_inteligência_quarta_feira_2030_B1:alo
+=======
+piscininha_amor_quinta_feira_1600_B2:alo
+piscininha_amor_quinta_feira_1600_B3:alo
+invocacao_da_inteligência_quarta_feira_2030_A2:alo
+invocacao_da_inteligência_quarta_feira_2030_A3:max
+invocacao_da_inteligência_quarta_feira_2030_A4:max
+>>>>>>> Stashed changes
