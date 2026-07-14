@@ -2,11 +2,12 @@ import tkinter as tk
 from tkinter import messagebox
 import random
 
-def abrir_pagamento(filme_nome, dia, assentos, qtd_ingressos, funcao_atualizar_menu):
+# Agora a função recebe tickets_comprados_ref e não faz nenhuma importação de Cadastro.py
+def abrir_pagamento(filme_nome, dia, assentos, qtd_ingressos, funcao_atualizar_menu, tickets_comprados_ref):
     janela_pag = tk.Toplevel()
     janela_pag.title("PobreFlix - Lanche e pagamento")
     janela_pag.configure(bg="#141414")
-    janela_pag.geometry("550x800")  # Aumentamos um pouco a altura para caber as novidades confortavelmente
+    janela_pag.geometry("550x800")
     janela_pag.resizable(False, False)
 
     PRECO_INGRESSO_UNITARIO = 15.00
@@ -17,7 +18,7 @@ def abrir_pagamento(filme_nome, dia, assentos, qtd_ingressos, funcao_atualizar_m
     }
 
     variaveis_lanches = {lanche: tk.BooleanVar() for lanche in precos_lanches}
-    var_estudante = tk.BooleanVar(value=False)  # Variável de desconto para estudante
+    var_estudante = tk.BooleanVar(value=False)  # Variável para controlar desconto estudante
     forma_pagamento = tk.StringVar(value="Pix")
 
     tk.Label(janela_pag, text="FINALIZAR PEDIDO", fg="#E50914", bg="#141414", font=("Arial", 18, "bold")).pack(pady=10)
@@ -37,20 +38,18 @@ def abrir_pagamento(filme_nome, dia, assentos, qtd_ingressos, funcao_atualizar_m
     frame_lanches.pack(fill="x", padx=20, pady=10)
 
     def calcular_total_atual():
-        # Se for estudante, o valor do ingresso cai pela metade (50% de desconto)
+        # Desconto de 50% na meia entrada apenas sobre os ingressos
         if var_estudante.get():
-            total = (subtotal_ingressos * 0.5)
+            total = subtotal_ingressos * 0.5
         else:
             total = subtotal_ingressos
 
-        # Adiciona os lanches (não entram no desconto de meia-entrada)
         for lanche, var in variaveis_lanches.items():
             if var.get():
                 total += precos_lanches[lanche]
         return total
 
     def atualizar_interface_preco():
-        # Atualiza a exibição no resumo de ingressos
         if var_estudante.get():
             lbl_preco_ingressos.config(text=f"Valor dos Ingressos: R$ {subtotal_ingressos * 0.5:.2f} (Estudante -50%)", fg="#FFC107")
         else:
@@ -65,7 +64,7 @@ def abrir_pagamento(filme_nome, dia, assentos, qtd_ingressos, funcao_atualizar_m
             font=("Arial", 11), command=atualizar_interface_preco
         ).pack(anchor="w", pady=1)
 
-    # --- Sessão de Descontos e Convênios ---
+    # --- Benefícios/Estudante ---
     frame_descontos = tk.LabelFrame(janela_pag, text=" Benefícios e Descontos ", fg="white", bg="#222222", font=("Arial", 10, "bold"), padx=15, pady=8)
     frame_descontos.pack(fill="x", padx=20, pady=5)
 
@@ -76,7 +75,7 @@ def abrir_pagamento(filme_nome, dia, assentos, qtd_ingressos, funcao_atualizar_m
         command=atualizar_interface_preco
     ).pack(anchor="w")
 
-    # --- Dados de Pagamento ---
+    # --- Detalhes do Pagamento ---
     frame_detalhes_pag = tk.LabelFrame(janela_pag, text=" Dados de Pagamento ", fg="white", bg="#222222", font=("Arial", 10, "bold"), padx=15, pady=10)
     frame_detalhes_pag.pack(fill="x", padx=20, pady=5)
 
@@ -131,13 +130,10 @@ def abrir_pagamento(filme_nome, dia, assentos, qtd_ingressos, funcao_atualizar_m
         lanches_str = ", ".join(lanches_escolhidos) if lanches_escolhidos else "Nenhum lanche"
         
         codigo_autenticacao = f"PBR-{random.randint(10000, 99999)}-{random.randint(10, 99)}"
-
-        # Armazenando o tipo de entrada selecionada
         tipo_entrada = "Meia-Entrada (Estudante)" if var_estudante.get() else "Inteira"
 
-        # Importação vinda de Cadastro (onde se encontra o banco de tickets original)
-        from Cadastro3 import TICKETS_COMPRADOS
-        TICKETS_COMPRADOS.append({
+        # Salvando usando a referência recebida via argumento
+        tickets_comprados_ref.append({
             "filme": filme_nome,
             "dia": dia,
             "assentos": assentos,
@@ -176,7 +172,6 @@ def abrir_pagamento(filme_nome, dia, assentos, qtd_ingressos, funcao_atualizar_m
         
         tk.Label(frame_corpo_ticket, text="-----------------------------------", fg="black", bg="white", font=("Courier", 10)).pack(pady=10)
         
-        # Caso o estudante tenha selecionado a opção de meia, deixamos o lembrete explícito no ticket impresso
         if var_estudante.get():
             tk.Label(frame_corpo_ticket, text="* APRESENTAR COMPROVANTE DE ESTUDANTE NA ENTRADA *", fg="red", bg="white", font=("Courier", 8, "bold")).pack()
             tk.Label(frame_corpo_ticket, text="-----------------------------------", fg="black", bg="white", font=("Courier", 10)).pack()

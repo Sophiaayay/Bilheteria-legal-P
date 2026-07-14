@@ -1,12 +1,21 @@
 import os
 import tkinter as tk
 from tkinter import messagebox
-from filme import abrir_filme
+from filme import abrir_filme  # Importação ajustada para corresponder ao nome do arquivo 'filmes.py'
 
 ARQUIVO_DB = "UsuariosSalvos.txt"
 usuarios_db = {}
 
 TICKETS_COMPRADOS = []
+
+# Variáveis globais dos elementos gráficos (definidas como None inicialmente)
+janela = None
+frame_login = None
+frame_cadastro = None
+entry_log_usuario = None
+entry_log_senha = None
+entry_cad_usuario = None
+entry_cad_senha = None
 
 
 def carregar_usuarios():
@@ -19,12 +28,12 @@ def carregar_usuarios():
                     usuarios_db[usuario] = senha
 
 
-def centralizar_janela(janela, largura, altura):
-    largura_tela = janela.winfo_screenwidth()
-    altura_tela = janela.winfo_screenheight()
+def centralizar_janela(janela_obj, largura, altura):
+    largura_tela = janela_obj.winfo_screenwidth()
+    altura_tela = janela_obj.winfo_screenheight()
     x = (largura_tela // 2) - (largura // 2)
     y = (altura_tela // 2) - (altura // 2)
-    janela.geometry(f"{largura}x{altura}+{x}+{y}")
+    janela_obj.geometry(f"{largura}x{altura}+{x}+{y}")
 
 
 def mostrar_tela(frame_desejado):
@@ -77,7 +86,6 @@ def limpar_campos(*entries):
 
 
 def abrir_menu_principal(nome_usuario):
-
     janela_menu = tk.Tk()
     janela_menu.title("PobreFlix - Menu Principal")
     janela_menu.configure(bg="#141414")
@@ -146,7 +154,6 @@ def abrir_menu_principal(nome_usuario):
     lbl_usuario = tk.Label(topo, text=f"Olá, {nome_usuario}", fg="white", bg="#141414", font=("Arial", 16))
     lbl_usuario.pack(side="right")
 
-    # Mantido vazio apenas para compatibilidade de chamadas externas
     def atualizar_mural_tickets():
         pass
 
@@ -216,7 +223,8 @@ def abrir_menu_principal(nome_usuario):
                 linha += 1
 
     def intermediario_abrir_filme(f):
-        abrir_filme(f, nome_usuario, atualizar_mural_tickets)
+        # Repassando a lista TICKETS_COMPRADOS como parâmetro
+        abrir_filme(f, nome_usuario, atualizar_mural_tickets, TICKETS_COMPRADOS)
 
     def pesquisar():
         texto = entrada.get().lower()
@@ -229,39 +237,44 @@ def abrir_menu_principal(nome_usuario):
     janela_menu.mainloop()
 
 
-# --- INTERFACE E ESTRUTURA INICIAL ---
-janela = tk.Tk()
-janela.title("Login e Cadastro")
-janela.configure(bg="#f0f0f0")
-centralizar_janela(janela, 450, 450)
+def iniciar_sistema():
+    global janela, frame_login, frame_cadastro
+    global entry_log_usuario, entry_log_senha, entry_cad_usuario, entry_cad_senha
 
-carregar_usuarios()
+    janela = tk.Tk()
+    janela.title("Login e Cadastro")
+    janela.configure(bg="#f0f0f0")
+    centralizar_janela(janela, 450, 450)
 
-frame_login = tk.Frame(janela, bg="#f0f0f0")
-tk.Label(frame_login, text="Tela de Login", font=("Arial", 22, "bold"), bg="#f0f0f0", fg="#333").pack(pady=20)
-tk.Label(frame_login, text="Usuário:", font=("Arial", 12), bg="#f0f0f0").pack(anchor="w", padx=50)
-entry_log_usuario = tk.Entry(frame_login, font=("Arial", 12), width=28)
-entry_log_usuario.pack(pady=5)
-tk.Label(frame_login, text="Senha:", font=("Arial", 12), bg="#f0f0f0").pack(anchor="w", padx=50)
-entry_log_senha = tk.Entry(frame_login, font=("Arial", 12), show="*", width=28)
-entry_log_senha.pack(pady=5)
-tk.Button(frame_login, text="Entrar", font=("Arial", 12, "bold"), command=fazer_login, bg="#4CAF50", fg="white", width=15, cursor="hand2").pack(pady=20)
-tk.Label(frame_login, text="Ainda não tem uma conta?", font=("Arial", 10), bg="#f0f0f0", fg="#666").pack()
-tk.Button(frame_login, text="Cadastre-se", font=("Arial", 10, "underline"), fg="#2196F3", bg="#f0f0f0", bd=0, command=lambda: [limpar_campos(entry_log_usuario, entry_log_senha), mostrar_tela(frame_cadastro)], cursor="hand2").pack()
+    carregar_usuarios()
 
-frame_cadastro = tk.Frame(janela, bg="#f0f0f0")
-tk.Label(frame_cadastro, text="Cadastro de Conta", font=("Arial", 22, "bold"), bg="#f0f0f0", fg="#333").pack(pady=20)
-tk.Label(frame_cadastro, text="Novo Usuário:", font=("Arial", 12), bg="#f0f0f0").pack(anchor="w", padx=50)
-entry_cad_usuario = tk.Entry(frame_cadastro, font=("Arial", 12), width=28)
-entry_cad_usuario.pack(pady=5)
-tk.Label(frame_cadastro, text="Nova Senha:", font=("Arial", 12), bg="#f0f0f0").pack(anchor="w", padx=50)
-entry_cad_senha = tk.Entry(frame_cadastro, font=("Arial", 12), show="*", width=28)
-entry_cad_senha.pack(pady=5)
-tk.Button(frame_cadastro, text="Cadastrar", font=("Arial", 12, "bold"), command=cadastrar_usuario, bg="#2196F3", fg="white", width=15, cursor="hand2").pack(pady=20)
-tk.Label(frame_cadastro, text="Já possui uma conta?", font=("Arial", 10), bg="#f0f0f0", fg="#666").pack()
-tk.Button(frame_cadastro, text="Ir para o Login", font=("Arial", 10, "underline"), fg="#4CAF50", bg="#f0f0f0", bd=0, command=lambda: [limpar_campos(entry_cad_usuario, entry_cad_senha), mostrar_tela(frame_login)], cursor="hand2").pack()
+    frame_login = tk.Frame(janela, bg="#f0f0f0")
+    tk.Label(frame_login, text="Tela de Login", font=("Arial", 22, "bold"), bg="#f0f0f0", fg="#333").pack(pady=20)
+    tk.Label(frame_login, text="Usuário:", font=("Arial", 12), bg="#f0f0f0").pack(anchor="w", padx=50)
+    entry_log_usuario = tk.Entry(frame_login, font=("Arial", 12), width=28)
+    entry_log_usuario.pack(pady=5)
+    tk.Label(frame_login, text="Senha:", font=("Arial", 12), bg="#f0f0f0").pack(anchor="w", padx=50)
+    entry_log_senha = tk.Entry(frame_login, font=("Arial", 12), show="*", width=28)
+    entry_log_senha.pack(pady=5)
+    tk.Button(frame_login, text="Entrar", font=("Arial", 12, "bold"), command=fazer_login, bg="#4CAF50", fg="white", width=15, cursor="hand2").pack(pady=20)
+    tk.Label(frame_login, text="Ainda não tem uma conta?", font=("Arial", 10), bg="#f0f0f0", fg="#666").pack()
+    tk.Button(frame_login, text="Cadastre-se", font=("Arial", 10, "underline"), fg="#2196F3", bg="#f0f0f0", bd=0, command=lambda: [limpar_campos(entry_log_usuario, entry_log_senha), mostrar_tela(frame_cadastro)], cursor="hand2").pack()
 
-# Proteção para a interface só iniciar se o arquivo for executado diretamente
-if __name__ == "__main__":
+    frame_cadastro = tk.Frame(janela, bg="#f0f0f0")
+    tk.Label(frame_cadastro, text="Cadastro de Conta", font=("Arial", 22, "bold"), bg="#f0f0f0", fg="#333").pack(pady=20)
+    tk.Label(frame_cadastro, text="Novo Usuário:", font=("Arial", 12), bg="#f0f0f0").pack(anchor="w", padx=50)
+    entry_cad_usuario = tk.Entry(frame_cadastro, font=("Arial", 12), width=28)
+    entry_cad_usuario.pack(pady=5)
+    tk.Label(frame_cadastro, text="Nova Senha:", font=("Arial", 12), bg="#f0f0f0").pack(anchor="w", padx=50)
+    entry_cad_senha = tk.Entry(frame_cadastro, font=("Arial", 12), show="*", width=28)
+    entry_cad_senha.pack(pady=5)
+    tk.Button(frame_cadastro, text="Cadastrar", font=("Arial", 12, "bold"), command=cadastrar_usuario, bg="#2196F3", fg="white", width=15, cursor="hand2").pack(pady=20)
+    tk.Label(frame_cadastro, text="Já possui uma conta?", font=("Arial", 10), bg="#f0f0f0", fg="#666").pack()
+    tk.Button(frame_cadastro, text="Ir para o Login", font=("Arial", 10, "underline"), fg="#4CAF50", bg="#f0f0f0", bd=0, command=lambda: [limpar_campos(entry_cad_usuario, entry_cad_senha), mostrar_tela(frame_login)], cursor="hand2").pack()
+
     mostrar_tela(frame_login)
     janela.mainloop()
+
+
+if __name__ == "__main__":
+    iniciar_sistema()

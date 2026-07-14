@@ -64,3 +64,5 @@ piscininha_amor_sabado_2200_A1:alo
 piscininha_amor_sabado_2200_D3:alo
 piscininha_amor_sabado_2200_B1:alo
 lobo_pidao_a_origem_quarta_feira_1500_D5:max
+lobo_pidao_a_origem_quarta_feira_1500_C5:max
+death_note_o_ultimo_domingo_à_noite_sexta_feira_2100_B4:max

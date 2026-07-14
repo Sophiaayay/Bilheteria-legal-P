@@ -35,7 +35,8 @@ def salvar_multiplos_assentos(lista_chaves, usuario):
             arquivo.write(f"{chave}:{usuario}\n")
 
 
-def abrir_filme(filme, nome_usuario, funcao_atualizar_menu):
+# Agora a função recebe tickets_comprados_ref como parâmetro
+def abrir_filme(filme, nome_usuario, funcao_atualizar_menu, tickets_comprados_ref):
     janela_filme = tk.Toplevel()
     janela_filme.title(f"PobreFlix - {filme['nome']}")
     janela_filme.configure(bg="#141414")
@@ -93,7 +94,6 @@ def abrir_filme(filme, nome_usuario, funcao_atualizar_menu):
         for widget in frame_confirmar.winfo_children():
             widget.destroy()
 
-        # Legenda atualizada contendo os assentos preferenciais na cor azul
         tk.Label(
             frame_mapa_assentos,
             text=f"Mapa de Assentos para {dia_escolhido}\n"
@@ -108,8 +108,7 @@ def abrir_filme(filme, nome_usuario, funcao_atualizar_menu):
 
         for linha in range(4):
             letra_linha = chr(65 + linha)
-            # Definindo a última linha (Linha D) como preferencial por lei
-            e_preferencial = (letra_linha == "D")
+            e_preferencial = (letra_linha == "D")  # Linha D é a preferencial
 
             for coluna in range(5):
                 nome_assento = f"{letra_linha}{coluna + 1}"
@@ -124,7 +123,6 @@ def abrir_filme(filme, nome_usuario, funcao_atualizar_menu):
                 elif dono_reserva is not None:
                     cor_fundo, estado, texto_exibir = "#E50914", "disabled", f"{nome_assento}\n(Ocup.)"
                 elif e_preferencial:
-                    # Assentos preferenciais livres começam em Azul
                     cor_fundo, estado, texto_exibir = "#1E90FF", "normal", f"{nome_assento}\n(Pref.)"
                 else:
                     cor_fundo, estado, texto_exibir = "#555555", "normal", nome_assento
@@ -133,22 +131,20 @@ def abrir_filme(filme, nome_usuario, funcao_atualizar_menu):
                     if n in assentos_selecionados_agora:
                         assentos_selecionados_agora.remove(n)
                         chaves_para_salvar.remove(c)
-                        # Retorna para a cor padrão de acordo com a categoria
                         if pref:
                             btn.config(bg="#1E90FF", text=f"{n}\n(Pref.)")
                         else:
                             btn.config(bg="#555555", text=n)
                     else:
-                        # Se for preferencial, exibe um aviso educacional de confirmação
                         if pref:
                             resposta = messagebox.askyesno(
                                 "Assento Preferencial",
                                 f"O assento {n} é reservado preferencialmente para idosos, autistas, "
-                                f"gestantes ou pessoas com deficiência física por direito de lei.\n\n"
+                                f"gestantes ou pessoas com deficiência física.\n\n"
                                 f"Deseja selecionar este assento?"
                             )
                             if not resposta:
-                                return  # Usuário cancelou a seleção
+                                return
 
                         assentos_selecionados_agora.append(n)
                         chaves_para_salvar.append(c)
@@ -170,12 +166,14 @@ def abrir_filme(filme, nome_usuario, funcao_atualizar_menu):
             salvar_multiplos_assentos(chaves_para_salvar, nome_usuario)
             janela_filme.destroy()
             
+            # Passando o tickets_comprados_ref adiante para o pagamento
             abrir_pagamento(
                 filme['nome'], 
                 dia_escolhido, 
                 ", ".join(assentos_selecionados_agora), 
                 len(assentos_selecionados_agora),
-                funcao_atualizar_menu
+                funcao_atualizar_menu,
+                tickets_comprados_ref
             )
 
         tk.Button(
