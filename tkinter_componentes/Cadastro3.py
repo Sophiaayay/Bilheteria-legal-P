@@ -4,8 +4,9 @@ from tkinter import messagebox
 from filme import abrir_filme 
 
 ARQUIVO_DB = "UsuariosSalvos.txt"
-usuarios_db = {}
+ARQUIVO_TICKETS = "TicketsSalvos.txt" 
 
+usuarios_db = {}
 TICKETS_COMPRADOS = []
 
 janela = None
@@ -25,6 +26,38 @@ def carregar_usuarios():
                 if ":" in linha:
                     usuario, senha = linha.split(":", 1)
                     usuarios_db[usuario] = senha
+
+
+def carregar_tickets(nome_usuario):
+    """Lê o arquivo de tickets salvos e carrega apenas os tickets do usuário logado"""
+    global TICKETS_COMPRADOS
+    TICKETS_COMPRADOS.clear() 
+    
+    if os.path.exists(ARQUIVO_TICKETS):
+        with open(ARQUIVO_TICKETS, "r", encoding="utf-8") as arquivo:
+            for linha in arquivo:
+                linha = linha.strip()
+                if not linha:
+                    continue
+                partes = linha.split(";")
+                if len(partes) == 6:
+                    user_dono, filme, dia, assentos, total, codigo = partes
+                    
+                    if user_dono == nome_usuario:
+                        TICKETS_COMPRADOS.append({
+                            "filme": filme,
+                            "dia": dia,
+                            "assentos": assentos,
+                            "total": total,
+                            "codigo": codigo
+                        })
+
+
+def salvar_ticket_no_arquivo(nome_usuario, ticket):
+    """Adiciona de forma persistente o novo ticket no arquivo de texto"""
+    with open(ARQUIVO_TICKETS, "a", encoding="utf-8") as arquivo:
+        linha = f"{nome_usuario};{ticket['filme']};{ticket['dia']};{ticket['assentos']};{ticket['total']};{ticket['codigo']}\n"
+        arquivo.write(linha)
 
 
 def centralizar_janela(janela_obj, largura, altura):
@@ -72,6 +105,8 @@ def fazer_login():
     if usuarios_db.get(usuario) == senha:
         messagebox.showinfo("Sucesso", f"Bem-vindo, {usuario}!")
         limpar_campos(entry_log_usuario, entry_log_senha)
+        
+        carregar_tickets(usuario)
         
         janela.destroy()
         abrir_menu_principal(usuario)
@@ -145,16 +180,71 @@ def abrir_menu_principal(nome_usuario):
     ]
 
     topo = tk.Frame(janela_menu, bg="#141414")
-    topo.pack(fill="x", padx=40, pady=10)
+    topo.pack(fill="x", padx=40, pady=15)
 
     titulo = tk.Label(topo, text="POBREFLIX", fg="#E50914", bg="#141414", font=("Arial", 30, "bold"))
     titulo.pack(side="left")
 
-    lbl_usuario = tk.Label(topo, text=f"Olá, {nome_usuario}", fg="white", bg="#141414", font=("Arial", 16))
-    lbl_usuario.pack(side="right")
+    frame_usuario_acoes = tk.Frame(topo, bg="#141414")
+    frame_usuario_acoes.pack(side="right")
+
+    lbl_usuario = tk.Label(frame_usuario_acoes, text=f"Olá, {nome_usuario}  |  ", fg="white", bg="#141414", font=("Arial", 14))
+    lbl_usuario.pack(side="left")
+
+    def abrir_meus_tickets():
+        janela_tickets = tk.Toplevel()
+        janela_tickets.title("Meus Ingressos Comprados")
+        janela_tickets.geometry("500x550")
+        janela_tickets.configure(bg="#141414")
+        janela_tickets.resizable(False, False)
+
+        tk.Label(janela_tickets, text="MEUS INGRESSOS", fg="#E50914", bg="#141414", font=("Arial", 18, "bold")).pack(pady=15)
+
+        canvas_t = tk.Canvas(janela_tickets, bg="#141414", highlightthickness=0)
+        scrollbar_t = tk.Scrollbar(janela_tickets, orient="vertical", command=canvas_t.yview)
+        frame_lista_tickets = tk.Frame(canvas_t, bg="#141414")
+
+        frame_lista_tickets.bind(
+            "<Configure>",
+            lambda e: canvas_t.configure(scrollregion=canvas_t.bbox("all"))
+        )
+        canvas_t.create_window((250, 0), window=frame_lista_tickets, anchor="n")
+        canvas_t.configure(yscrollcommand=scrollbar_t.set)
+        canvas_t.pack(side="left", fill="both", expand=True, padx=10)
+        scrollbar_t.pack(side="right", fill="y")
+
+        if not TICKETS_COMPRADOS:
+            tk.Label(
+                frame_lista_tickets, 
+                text="Você ainda não comprou nenhum ingresso.\nSuas compras aparecerão aqui!", 
+                fg="#AAAAAA", bg="#141414", font=("Arial", 12, "italic"), justify="center"
+            ).pack(pady=100)
+            return
+
+        for i, ticket in enumerate(TICKETS_COMPRADOS):
+            card_ticket = tk.Frame(frame_lista_tickets, bg="#222222", padx=15, pady=12, bd=1, relief="solid")
+            card_ticket.pack(fill="x", pady=10, ipady=5)
+
+            tk.Label(card_ticket, text=f"Ticket #{i+1} - {ticket['filme'].upper()}", fg="#FFC107", bg="#222222", font=("Arial", 12, "bold"), anchor="w").pack(fill="x")
+            tk.Label(card_ticket, text=f"Sessão: {ticket['dia']}", fg="white", bg="#222222", font=("Arial", 10), anchor="w").pack(fill="x")
+            tk.Label(card_ticket, text=f"Assento(s): {ticket['assentos']}", fg="#4CAF50", bg="#222222", font=("Arial", 10, "bold"), anchor="w").pack(fill="x")
+            tk.Label(card_ticket, text=f"Valor Pago: {ticket['total']}", fg="white", bg="#222222", font=("Arial", 10), anchor="w").pack(fill="x")
+            
+            frame_cod = tk.Frame(card_ticket, bg="black", padx=5, pady=3)
+            frame_cod.pack(pady=(8, 0), anchor="w")
+            tk.Label(frame_cod, text=f"CÓDIGO: {ticket['codigo']}", fg="white", bg="black", font=("Courier", 10, "bold")).pack()
+
+    btn_meus_tickets = tk.Button(
+        frame_usuario_acoes, text="Meus Tickets", bg="#E50914", fg="white", 
+        font=("Arial", 11, "bold"), relief="flat", padx=12, pady=5, 
+        cursor="hand2", command=abrir_meus_tickets
+    )
+    btn_meus_tickets.pack(side="left")
 
     def atualizar_mural_tickets():
-        pass
+        if TICKETS_COMPRADOS:
+            ultimo_ticket = TICKETS_COMPRADOS[-1]
+            salvar_ticket_no_arquivo(nome_usuario, ultimo_ticket)
 
     frame_pesquisa = tk.Frame(janela_menu, bg="#141414")
     frame_pesquisa.pack(fill="x", padx=40, pady=10)

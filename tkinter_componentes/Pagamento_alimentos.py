@@ -71,7 +71,6 @@ def abrir_pagamento(filme_nome, dia, assentos, qtd_ingressos, funcao_atualizar_m
         command=atualizar_interface_preco
     ).pack(anchor="w")
 
-    # --- Detalhes do Pagamento ---
     frame_detalhes_pag = tk.LabelFrame(janela_pag, text=" Dados de Pagamento ", fg="white", bg="#222222", font=("Arial", 10, "bold"), padx=15, pady=10)
     frame_detalhes_pag.pack(fill="x", padx=20, pady=5)
 
