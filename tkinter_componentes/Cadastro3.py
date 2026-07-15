@@ -29,7 +29,6 @@ def carregar_usuarios():
 
 
 def carregar_tickets(nome_usuario):
-    """Lê o arquivo de tickets salvos e carrega apenas os tickets do usuário logado"""
     global TICKETS_COMPRADOS
     TICKETS_COMPRADOS.clear() 
     
@@ -54,7 +53,6 @@ def carregar_tickets(nome_usuario):
 
 
 def salvar_ticket_no_arquivo(nome_usuario, ticket):
-    """Adiciona de forma persistente o novo ticket no arquivo de texto"""
     with open(ARQUIVO_TICKETS, "a", encoding="utf-8") as arquivo:
         linha = f"{nome_usuario};{ticket['filme']};{ticket['dia']};{ticket['assentos']};{ticket['total']};{ticket['codigo']}\n"
         arquivo.write(linha)
